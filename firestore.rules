@@ -1,9 +1,35 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+
+    function signedIn() { return request.auth != null; }
+    function isAnonymous() {
+      return request.auth.token.firebase.sign_in_provider == 'anonymous';
+    }
+    function isRegistered() { return signedIn() && !isAnonymous(); }
+
+    // Kein eigenes Profil-Dokument unter users/{uid} nötig: Name und E-Mail stecken in Firebase Auth.
+
+    match /users/{uid}/favorites/{recipeId} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /recipes/{recipeId} {
+      allow read: if signedIn();
+
+      allow create: if isRegistered()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.searchTitle == request.resource.data.title.lower();
+
+      allow update: if isRegistered()
+        && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId
+        && request.resource.data.searchTitle == request.resource.data.title.lower();
+
+      allow delete: if isRegistered()
+        && resource.data.authorId == request.auth.uid;
     }
   }
 }
