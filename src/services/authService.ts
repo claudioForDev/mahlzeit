@@ -89,7 +89,7 @@ export async function deleteAvatar() {
   if (!user) throw new Error('Nicht angemeldet');
   const avatarRef = ref(storage, `avatars/${user.uid}`);
   await deleteObject(avatarRef);
-  await updateProfile(user, { photoURL: null });
+  await updateProfile(user, { photoURL: '' }); // '' statt null – Emulator akzeptiert sonst das JSON nicht
 }
 
 // Konto endgültig löschen. Rezepte dieses Users bleiben in Firestore stehen
