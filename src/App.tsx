@@ -1,27 +1,26 @@
-import { Header } from './components/Header';
-import { AuthForm } from './components/AuthForm';
-import { useAuthStore, selectIsAnonymous } from './store/auth-store';
+import { Header } from './components/layout/Header/Header';
 import { Routes, Route } from 'react-router-dom';
-import { ProfilePage } from './components/ProfilePage';
+import { ProfilePage } from './pages/profile/ProfilePage';
+import { Navigation } from './components/layout/Navigation/Navigation';
+import { HomePage } from './pages/HomePage/HomePage';
+import { RecipesPage } from './pages/RecipesPage/RecipesPage';
+import { FavoritesPage } from './pages/FavoritesPage/FavoritesPage';
+import { EditProfilePage } from './pages/profile/EditProfilePage';
 
 function App() {
-  const currentUser = useAuthStore((s) => s.currentUser);
-  const isAnonymous = useAuthStore(selectIsAnonymous);
-
-  if (!currentUser) {
-    return <p>Laden...</p>;
-  }
-
   return (
     <>
       <Header />
-      <Routes>
-        <Route path="/" element={<h1>Rezeptliste</h1>} />
-        <Route path="/profile" element={<ProfilePage />} />
-      </Routes>
+      <Navigation />
       <main>
-        {isAnonymous && <AuthForm />}
-        {/* Hier kommt später der Rest der App hin (Rezepte, Favoriten, ...) */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/rezepte" element={<RecipesPage />} />
+          <Route path="/favoriten" element={<FavoritesPage />} />
+          <Route path="/erstellen" element={<h1>Erstellen</h1>} />
+          <Route path="/profil" element={<ProfilePage />} />
+          <Route path="/profil/bearbeiten" element={<EditProfilePage />} />
+        </Routes>
       </main>
     </>
   );

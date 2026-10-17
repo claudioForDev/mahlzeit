@@ -1,0 +1,61 @@
+@use '../../styles/abstracts' as *;
+
+.profile {
+  display: grid;
+  gap: $space-large;
+}
+
+.user {
+  display: flex;
+  gap: 20px;
+}
+
+.profileImg {
+  display: block;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+
+  &.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $color-border;
+    color: $color-text;
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-medium;
+  text-align: center;
+
+  .statItem {
+    background-color: white;
+    display: grid;
+    justify-content: center;
+    border-radius: $border-radius-default;
+    padding: $space-small;
+  }
+
+  .statCount {
+    display: block;
+    font-size: 2rem;
+  }
+}
+
+.menuList {
+  display: grid;
+  gap: $space-small;
+
+  .menuItem {
+    display: flex;
+    gap: $space-small;
+    background-color: white;
+    padding: $space-small;
+    width: 100%;
+    border-radius: $border-radius-default;
+  }
+}

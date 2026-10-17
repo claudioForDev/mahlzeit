@@ -3,9 +3,13 @@ import {
   useAuthStore,
   useAuthActions,
   selectIsAnonymous,
-} from '../store/auth-store';
+} from '../../store/auth-store';
+import { AuthForm } from '../../components/auth/AuthForm';
+import styles from './ProfilePage.module.scss';
+import { CircleUser } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export function ProfilePage() {
+export function EditProfilePage() {
   const currentUser = useAuthStore((s) => s.currentUser);
   const displayName = useAuthStore((s) => s.displayName);
   const photoURL = useAuthStore((s) => s.photoURL);
@@ -13,7 +17,6 @@ export function ProfilePage() {
   const error = useAuthStore((s) => s.error);
   const info = useAuthStore((s) => s.info);
   const {
-    logout,
     updateName,
     changePassword,
     uploadAvatar,
@@ -37,6 +40,7 @@ export function ProfilePage() {
           Registriere dich, um ein Profil zu haben und deine Favoriten dauerhaft
           zu sichern.
         </p>
+        <AuthForm />
       </div>
     );
   }
@@ -71,58 +75,88 @@ export function ProfilePage() {
   };
 
   return (
-    <div className="profile">
-      {photoURL && (
-        <img src={photoURL} alt="Profilbild" className="profile__avatar" />
-      )}
-      <label className="btn btn--default">
-        Profilbild ändern
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleAvatarChange}
-          hidden
-        />
-      </label>
-      {photoURL && (
-        <button className="btn btn--default" onClick={deleteAvatar}>
-          Profilbild löschen
-        </button>
-      )}
+    <>
+      <title>Profil bearbeiten | mahlzeit</title>
 
-      {editingName ? (
-        <form onSubmit={handleNameSave} className="form form--profile">
-          <label>
-            Name
+      <h1>Profil</h1>
+      <Link to="/profil">zurück</Link>
+
+      <div className={styles.profile}>
+        <div>
+          {photoURL ? (
+            <img
+              src={photoURL}
+              alt="Profilbild"
+              className={styles.profileImg}
+            />
+          ) : (
+            <span className={`${styles.profileImg} ${styles.empty}`}>
+              <CircleUser size={40} strokeWidth={1.5} />
+            </span>
+          )}
+
+          <label className="btn btn--default">
+            Profilbild hinzufügen
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              hidden
             />
           </label>
-          <button type="submit">Speichern</button>
-          <button
-            type="button"
-            className="btn btn--default"
-            onClick={() => setEditingName(false)}
-          >
-            Abbrechen
-          </button>
-        </form>
-      ) : (
-        <>
-          <h2>{displayName}</h2>
-          <button
-            className="btn btn--default"
-            onClick={() => setEditingName(true)}
-          >
-            Name bearbeiten
-          </button>
-        </>
-      )}
+          {photoURL && (
+            <>
+              <label className="btn btn--default">
+                Profilbild ändern
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                  hidden
+                />
+              </label>
+              <button className="btn btn--default" onClick={deleteAvatar}>
+                Profilbild löschen
+              </button>
+            </>
+          )}
+        </div>
+        <div>
+          {editingName ? (
+            <form onSubmit={handleNameSave} className="form form--profile">
+              <label>
+                Name
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </label>
+              <button type="submit">Speichern</button>
+              <button
+                type="button"
+                className="btn btn--default"
+                onClick={() => setEditingName(false)}
+              >
+                Abbrechen
+              </button>
+            </form>
+          ) : (
+            <>
+              <h2>{displayName}</h2>
+              <button
+                className="btn btn--default"
+                onClick={() => setEditingName(true)}
+              >
+                Name bearbeiten
+              </button>
+            </>
+          )}
 
-      <p>{currentUser?.email}</p>
-      {memberSince && <p>Mitglied seit {memberSince}</p>}
+          <p>{currentUser?.email}</p>
+          {memberSince && <p>Mitglied seit {memberSince}</p>}
+        </div>
+      </div>
 
       <div className="profile__stats">
         {/* TODO: Werte aus recipe-store / favorite-store, sobald Rezept CRUD und Favorisieren gebaut sind */}
@@ -172,8 +206,6 @@ export function ProfilePage() {
       {error && <p className="form__error">{error}</p>}
       {info && <p className="form__info">{info}</p>}
 
-      <button onClick={logout}>Abmelden</button>
-
       {deletingAccount ? (
         <form onSubmit={handleDeleteAccount} className="form form--profile">
           <p>
@@ -206,6 +238,6 @@ export function ProfilePage() {
           Konto löschen
         </button>
       )}
-    </div>
+    </>
   );
 }
