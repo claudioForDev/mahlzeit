@@ -1,0 +1,52 @@
+@use '../abstracts' as *;
+
+.form {
+  // Form Reset
+  input,
+  textarea,
+  select {
+    display: block;
+    color: inherit;
+    letter-spacing: inherit;
+    margin: 0;
+    padding: $space-small;
+    border: none;
+    background: white;
+    border-radius: $border-radius-small;
+    appearance: none;
+    width: 100%;
+  }
+
+  button,
+  [type='button'],
+  [type='submit'],
+  [type='reset'] {
+    cursor: pointer;
+  }
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  legend {
+    padding: 0;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  ::placeholder {
+    color: currentColor;
+    opacity: 0.5;
+  }
+
+  :disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
