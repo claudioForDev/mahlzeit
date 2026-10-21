@@ -96,7 +96,7 @@ export function EditProfilePage() {
           )}
 
           <label className="btn btn--default">
-            Profilbild hinzufügen
+            {photoURL ? 'Profilbild ändern' : 'Profilbild hinzufügen'}
             <input
               type="file"
               accept="image/*"
@@ -105,20 +105,9 @@ export function EditProfilePage() {
             />
           </label>
           {photoURL && (
-            <>
-              <label className="btn btn--default">
-                Profilbild ändern
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  hidden
-                />
-              </label>
-              <button className="btn btn--default" onClick={deleteAvatar}>
-                Profilbild löschen
-              </button>
-            </>
+            <button className="btn btn--default" onClick={deleteAvatar}>
+              Profilbild löschen
+            </button>
           )}
         </div>
         <div>
