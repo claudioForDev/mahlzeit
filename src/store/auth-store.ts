@@ -26,88 +26,70 @@ interface AuthActions {
   deleteAccount: (currentPassword: string) => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
-  currentUser: undefined,
-  displayName: null,
-  photoURL: null,
-  error: null,
-  info: null,
-  actions: {
-    login: async (email, password) => {
-      set({ error: null, info: null });
-      try {
-        await authService.login(email, password);
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
+export const useAuthStore = create<AuthState>()((set) => {
+  // Gemeinsames Error-Handling: Meldungen zurücksetzen, Fehler in den Store schreiben
+  const run = async (fn: () => Promise<unknown>) => {
+    set({ error: null, info: null });
+    try {
+      await fn();
+    } catch (e) {
+      set({ error: (e as Error).message });
+    }
+  };
+
+  return {
+    currentUser: undefined,
+    displayName: null,
+    photoURL: null,
+    error: null,
+    info: null,
+    actions: {
+      login: (email, password) =>
+        run(() => authService.login(email, password)),
+
+      register: (email, password, name) =>
+        run(async () => {
+          await authService.register(email, password, name);
+          set({ displayName: name });
+        }),
+
+      logout: () => run(() => authService.logout()),
+
+      updateName: (name) =>
+        run(async () => {
+          await authService.updateName(name);
+          set({ displayName: name });
+        }),
+
+      changePassword: (currentPassword, newPassword) =>
+        run(() => authService.changePassword(currentPassword, newPassword)),
+
+      uploadAvatar: (file) =>
+        run(async () => {
+          const photoURL = await authService.uploadAvatar(file);
+          set({ photoURL });
+        }),
+
+      deleteAvatar: () =>
+        run(async () => {
+          await authService.deleteAvatar();
+          set({ photoURL: null });
+        }),
+
+      resetPassword: (email) =>
+        run(async () => {
+          await authService.resetPassword(email);
+          set({ info: 'E-Mail zum Zurücksetzen des Passworts wurde gesendet.' });
+        }),
+
+      deleteAccount: (currentPassword) =>
+        run(async () => {
+          await authService.deleteAccount(currentPassword);
+          set({ info: 'Konto wurde gelöscht.' });
+        }),
     },
-    register: async (email, password, name) => {
-      set({ error: null });
-      try {
-        await authService.register(email, password, name);
-        set({ displayName: name });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-    logout: async () => {
-      await authService.logout();
-    },
-    updateName: async (name) => {
-      set({ error: null });
-      try {
-        await authService.updateName(name);
-        set({ displayName: name });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-    changePassword: async (currentPassword, newPassword) => {
-      set({ error: null });
-      try {
-        await authService.changePassword(currentPassword, newPassword);
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-    uploadAvatar: async (file) => {
-      set({ error: null });
-      try {
-        const photoURL = await authService.uploadAvatar(file);
-        set({ photoURL });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-    deleteAvatar: async () => {
-      set({ error: null });
-      try {
-        await authService.deleteAvatar();
-        set({ photoURL: null });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-    resetPassword: async (email) => {
-      set({ error: null, info: null });
-      try {
-        await authService.resetPassword(email);
-        set({ info: 'E-Mail zum Zurücksetzen des Passworts wurde gesendet.' });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-    deleteAccount: async (currentPassword) => {
-      set({ error: null, info: null });
-      try {
-        await authService.deleteAccount(currentPassword);
-        set({ info: 'Konto wurde gelöscht.' });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    },
-  },
-}));
+  };
+});
 
 export const useAuthActions = () => useAuthStore((s) => s.actions);
 export const selectIsAnonymous = (s: AuthState) =>
