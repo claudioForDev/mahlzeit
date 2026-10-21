@@ -22,6 +22,23 @@ import {
 } from 'firebase/storage';
 import { auth, storage } from '../firebase';
 
+// Gibt den angemeldeten User zurück oder wirft einen Fehler
+function requireUser() {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Nicht angemeldet');
+  return user;
+}
+
+// Firebase verlangt für heikle Aktionen (Passwort ändern, Konto löschen) eine frische Anmeldung
+async function reauthenticate(user: User, password: string) {
+  if (!user.email) throw new Error('Nicht angemeldet');
+  const credential = EmailAuthProvider.credential(user.email, password);
+  await reauthenticateWithCredential(user, credential);
+}
+
+// Fester Pfad pro User, jeder Upload überschreibt den alten
+const avatarRef = (uid: string) => ref(storage, `avatars/${uid}`);
+
 // Ist niemand angemeldet, wird automatisch anonym angemeldet.
 // Das feuert danach onAuthStateChanged erneut, diesmal mit dem neuen User.
 export function watchAuth(callback: (user: User) => void) {
@@ -56,8 +73,7 @@ export async function register(email: string, password: string, name: string) {
 
 // Name nachträglich ändern (Profil bearbeiten)
 export async function updateName(name: string) {
-  if (!auth.currentUser) throw new Error('Nicht angemeldet');
-  await updateProfile(auth.currentUser, { displayName: name });
+  await updateProfile(requireUser(), { displayName: name });
 }
 
 // Passwort ändern: Firebase verlangt dafür eine frische Anmeldung (Re-Authentifizierung)
@@ -65,43 +81,36 @@ export async function changePassword(
   currentPassword: string,
   newPassword: string,
 ) {
-  const user = auth.currentUser;
-  if (!user?.email) throw new Error('Nicht angemeldet');
-  const credential = EmailAuthProvider.credential(user.email, currentPassword);
-  await reauthenticateWithCredential(user, credential);
+  const user = requireUser();
+  await reauthenticate(user, currentPassword);
   await updatePassword(user, newPassword);
 }
 
-// Profilbild hochladen: fester Pfad pro User, jeder Upload überschreibt den alten
+// Profilbild hochladen
 export async function uploadAvatar(file: File) {
-  const user = auth.currentUser;
-  if (!user) throw new Error('Nicht angemeldet');
-  const avatarRef = ref(storage, `avatars/${user.uid}`);
-  await uploadBytes(avatarRef, file);
-  const photoURL = await getDownloadURL(avatarRef);
+  const user = requireUser();
+  const fileRef = avatarRef(user.uid);
+  await uploadBytes(fileRef, file);
+  const photoURL = await getDownloadURL(fileRef);
   await updateProfile(user, { photoURL });
   return photoURL;
 }
 
 // Profilbild löschen: Datei aus Storage entfernen und photoURL zurücksetzen
 export async function deleteAvatar() {
-  const user = auth.currentUser;
-  if (!user) throw new Error('Nicht angemeldet');
-  const avatarRef = ref(storage, `avatars/${user.uid}`);
-  await deleteObject(avatarRef);
+  const user = requireUser();
+  await deleteObject(avatarRef(user.uid));
   await updateProfile(user, { photoURL: '' }); // '' statt null – Emulator akzeptiert sonst das JSON nicht
 }
 
 // Konto endgültig löschen. Rezepte dieses Users bleiben in Firestore stehen
 // (authorId zeigt dann auf eine nicht mehr existierende UID, siehe datenmodell.md).
 export async function deleteAccount(currentPassword: string) {
-  const user = auth.currentUser;
-  if (!user?.email) throw new Error('Nicht angemeldet');
-  const credential = EmailAuthProvider.credential(user.email, currentPassword);
-  await reauthenticateWithCredential(user, credential);
+  const user = requireUser();
+  await reauthenticate(user, currentPassword);
   if (user.photoURL) {
     try {
-      await deleteObject(ref(storage, `avatars/${user.uid}`));
+      await deleteObject(avatarRef(user.uid));
     } catch {
       // kein Avatar vorhanden oder schon weg
     }
