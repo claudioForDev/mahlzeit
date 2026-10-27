@@ -23,7 +23,7 @@ import {
 import { auth, storage } from '../firebase';
 
 // Gibt den angemeldeten User zurück oder wirft einen Fehler
-function requireUser() {
+export function requireUser() {
   const user = auth.currentUser;
   if (!user) throw new Error('Nicht angemeldet');
   return user;
