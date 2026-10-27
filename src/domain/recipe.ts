@@ -12,6 +12,31 @@ export type Diet =
   'vegetarisch' | 'vegan' | 'laktosefrei' | 'glutenfrei' | 'gesund';
 export type Within = 'max15' | 'max30' | 'max60';
 
+// Anzeigetexte; die Reihenfolge bestimmt auch die Reihenfolge im UI
+export const MEAL_TYPE_LABELS: Record<MealType, string> = {
+  fruehstueck: 'Frühstück',
+  snack: 'Snack',
+  vorspeise: 'Vorspeise',
+  hauptgericht: 'Hauptgericht',
+  nachspeise: 'Dessert',
+  getraenke: 'Getränk',
+};
+
+export const SEASON_LABELS: Record<Season, string> = {
+  fruehling: 'Frühling',
+  sommer: 'Sommer',
+  herbst: 'Herbst',
+  winter: 'Winter',
+};
+
+export const DIET_LABELS: Record<Diet, string> = {
+  vegetarisch: 'Vegetarisch',
+  vegan: 'Vegan',
+  laktosefrei: 'Laktosefrei',
+  glutenfrei: 'Glutenfrei',
+  gesund: 'Gesund',
+};
+
 export const UNITS = [
   'g',
   'kg',

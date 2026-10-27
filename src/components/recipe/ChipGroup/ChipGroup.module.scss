@@ -1,0 +1,43 @@
+@use '../../../styles/abstracts' as *;
+
+.legend {
+  margin-bottom: $space-small;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-small;
+}
+
+.chip {
+  padding: 6px 14px;
+  border: 1px solid $color-border;
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+
+  &:has(.input:checked) {
+    border-color: $color-primary;
+    background: $color-primary;
+    color: white;
+  }
+
+  &:has(.input:focus-visible) {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+
+  // Doppelte Klasse, damit der Input-Reset aus _forms.scss (.form input) überschrieben wird
+  .input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+}

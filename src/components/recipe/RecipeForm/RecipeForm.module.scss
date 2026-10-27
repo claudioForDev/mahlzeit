@@ -1,0 +1,95 @@
+@use '../../../styles/abstracts' as *;
+
+.recipeForm {
+  display: grid;
+  gap: $space-medium;
+  max-width: 750px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.label {
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+// Zeiten und Portionen: auf dem Handy untereinander, ab Tablet nebeneinander
+.numbers {
+  display: grid;
+  gap: $space-medium;
+
+  @include breakpoint(tablet) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rows {
+  display: grid;
+  gap: $space-small;
+  margin-bottom: $space-small;
+}
+
+// Handy: Zutat über die ganze Breite, darunter Menge und Einheit
+.ingredient {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: $space-small;
+  align-items: center;
+
+  .ingredientName {
+    grid-column: 1 / -1;
+  }
+
+  @include breakpoint(tablet) {
+    grid-template-columns: 1fr 6rem 6rem auto;
+
+    .ingredientName {
+      grid-column: auto;
+    }
+  }
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: $space-small;
+  align-items: start;
+}
+
+.stepNumber {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: $color-primary;
+  color: white;
+  font-size: 0.85rem;
+}
+
+.add,
+.remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  color: $color-primary;
+  font-weight: 600;
+}
+
+.submit {
+  padding: 14px;
+  border: none;
+  border-radius: $border-radius-small;
+  background: $color-primary;
+  color: white;
+  font-weight: 600;
+}
