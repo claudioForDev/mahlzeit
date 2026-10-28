@@ -44,8 +44,7 @@ export const useAuthStore = create<AuthState>()((set) => {
     error: null,
     info: null,
     actions: {
-      login: (email, password) =>
-        run(() => authService.login(email, password)),
+      login: (email, password) => run(() => authService.login(email, password)),
 
       register: (email, password, name) =>
         run(async () => {
@@ -79,7 +78,9 @@ export const useAuthStore = create<AuthState>()((set) => {
       resetPassword: (email) =>
         run(async () => {
           await authService.resetPassword(email);
-          set({ info: 'E-Mail zum Zurücksetzen des Passworts wurde gesendet.' });
+          set({
+            info: 'E-Mail zum Zurücksetzen des Passworts wurde gesendet.',
+          });
         }),
 
       deleteAccount: (currentPassword) =>

@@ -17,7 +17,7 @@ interface RecipeActions {
 }
 
 export const useRecipeStore = create<RecipeState>()((set) => {
-  // Gemeinsames Loading- und Error-Handling, analog zum auth-store
+  // Gemeinsames Loading- und Error-Handling, analog zum authStore
   const run = async <T>(fn: () => Promise<T>) => {
     set({ loading: true, error: null });
     try {

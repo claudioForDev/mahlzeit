@@ -1,5 +1,5 @@
 import { useState, type SyntheticEvent } from 'react';
-import { useAuthStore, useAuthActions } from '../../store/auth-store';
+import { useAuthStore, useAuthActions } from '../../store/authStore';
 
 export function AuthForm() {
   const [mode, setMode] = useState<'login' | 'register'>('login');

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore, selectIsAnonymous } from '../../store/auth-store';
-import { useRecipeStore, useRecipeActions } from '../../store/recipe-store';
+import { useAuthStore, selectIsAnonymous } from '../../store/authStore';
+import { useRecipeStore, useRecipeActions } from '../../store/recipeStore';
 import { RecipeForm } from '../../components/recipe/RecipeForm/RecipeForm';
 import type { RecipeInput } from '../../domain/recipe';
 

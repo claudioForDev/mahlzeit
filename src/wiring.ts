@@ -1,5 +1,5 @@
 import * as authService from './services/authService';
-import { useAuthStore } from './store/auth-store';
+import { useAuthStore } from './store/authStore';
 
 export function initWiring() {
   // Firebase Auth -> Store

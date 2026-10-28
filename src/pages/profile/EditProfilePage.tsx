@@ -3,7 +3,7 @@ import {
   useAuthStore,
   useAuthActions,
   selectIsAnonymous,
-} from '../../store/auth-store';
+} from '../../store/authStore';
 import { AuthForm } from '../../components/auth/AuthForm';
 import styles from './ProfilePage.module.scss';
 import { CircleUser } from 'lucide-react';
@@ -148,7 +148,7 @@ export function EditProfilePage() {
       </div>
 
       <div className="profile__stats">
-        {/* TODO: Werte aus recipe-store / favorite-store, sobald Rezept CRUD und Favorisieren gebaut sind */}
+        {/* TODO: Werte aus recipeStore / favoriteStore, sobald Rezept CRUD und Favorisieren gebaut sind */}
         <p>Rezepte: –</p>
         <p>Favoriten: –</p>
       </div>

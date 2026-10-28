@@ -2,7 +2,7 @@ import {
   useAuthStore,
   useAuthActions,
   selectIsAnonymous,
-} from '../../store/auth-store';
+} from '../../store/authStore';
 import { AuthForm } from '../../components/auth/AuthForm';
 import styles from './ProfilePage.module.scss';
 import { CircleUser } from 'lucide-react';
