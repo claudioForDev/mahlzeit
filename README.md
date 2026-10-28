@@ -29,6 +29,7 @@ npm run dev
 ```
 
 ### Firebase Config
+
 ```bash
 VITE_FIREBASE_API_KEY=AIzaSyBCeDe3FtjH9r_2n4-hmfXMhYztAQJwWT8
 VITE_FIREBASE_AUTH_DOMAIN=fee-rezept-app.firebaseapp.com

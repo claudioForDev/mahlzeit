@@ -29,3 +29,6 @@ firebase-debug.log
 
 # Local project documents
 /docs/
+
+# Local Claude Code settings
+.claude/settings.local.json
