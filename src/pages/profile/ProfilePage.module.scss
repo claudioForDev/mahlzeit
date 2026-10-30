@@ -2,7 +2,7 @@
 
 .profile {
   display: grid;
-  gap: $space-large;
+  gap: $space-l;
 }
 
 .user {
@@ -29,7 +29,7 @@
 .stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: $space-medium;
+  gap: $space-m;
   text-align: center;
 
   .statItem {
@@ -37,7 +37,7 @@
     display: grid;
     justify-content: center;
     border-radius: $border-radius-default;
-    padding: $space-small;
+    padding: $space-s;
   }
 
   .statCount {
@@ -48,13 +48,13 @@
 
 .menuList {
   display: grid;
-  gap: $space-small;
+  gap: $space-s;
 
   .menuItem {
     display: flex;
-    gap: $space-small;
+    gap: $space-s;
     background-color: white;
-    padding: $space-small;
+    padding: $space-s;
     width: 100%;
     border-radius: $border-radius-default;
   }

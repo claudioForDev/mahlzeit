@@ -2,7 +2,7 @@
 
 .recipeForm {
   display: grid;
-  gap: $space-medium;
+  gap: $space-m;
   max-width: 750px;
 }
 
@@ -19,10 +19,23 @@
   text-transform: uppercase;
 }
 
+.preview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: $border-radius-small;
+}
+
+.imageActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-s;
+}
+
 // Zeiten und Portionen: auf dem Handy untereinander, ab Tablet nebeneinander
 .numbers {
   display: grid;
-  gap: $space-medium;
+  gap: $space-m;
 
   @include breakpoint(tablet) {
     grid-template-columns: repeat(3, 1fr);
@@ -31,15 +44,15 @@
 
 .rows {
   display: grid;
-  gap: $space-small;
-  margin-bottom: $space-small;
+  gap: $space-s;
+  margin-bottom: $space-s;
 }
 
 // Handy: Zutat über die ganze Breite, darunter Menge und Einheit
 .ingredient {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
-  gap: $space-small;
+  gap: $space-s;
   align-items: center;
 
   .ingredientName {
@@ -58,7 +71,7 @@
 .step {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: $space-small;
+  gap: $space-s;
   align-items: start;
 }
 

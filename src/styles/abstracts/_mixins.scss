@@ -1,8 +1,10 @@
 @use 'sass:map';
+@use './variables' as *;
 
 $breakpoints: (
   tablet: 768px,
   desktop: 1024px,
+  bigdesktop: 1920px,
 );
 
 @mixin breakpoint($name) {
@@ -13,4 +15,11 @@ $breakpoints: (
   @media (min-width: map.get($breakpoints, $name)) {
     @content;
   }
+}
+
+// Section divider on bottom
+@mixin section-divider {
+  padding-bottom: $space-m;
+  margin: $space-m 0;
+  border-bottom: 1px solid $color-border;
 }

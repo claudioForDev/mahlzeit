@@ -3,12 +3,27 @@ $color-paper: #f7f4ec; // Hintergrund
 $color-text: #2b2620; // Haupttextfarbe
 $color-primary: #7a8450; // Hauptakzent
 $color-border: #e4dfd3; // dezente Trennlinien
+$color-secondary: rgb(206, 69, 0);
 
 //Border radius
 $border-radius-default: 15px;
 $border-radius-small: 5px;
 
 //Abstände
-$space-small: 10px;
-$space-medium: 20px;
-$space-large: 40px;
+$space-xs: 5px;
+$space-s: 10px;
+$space-m: 20px;
+$space-l: 40px;
+$space-xl: 80px;
+
+//Fontsizes
+$font-xs: 0.75rem;
+$font-s: 1rem;
+$font-m: 1.25rem;
+$font-l: 1.5rem;
+$font-xl: 2rem;
+
+//fontweight
+$font-light: 300;
+$font-reg: 500;
+$font-bold: 700;

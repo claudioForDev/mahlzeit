@@ -1,6 +1,11 @@
 @use '../abstracts' as *;
 
 .btn {
-  padding: 5px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-xs $space-m;
   background-color: $color-primary;
+  color: white;
+  border-radius: $border-radius-default;
 }

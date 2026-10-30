@@ -1,7 +1,7 @@
 @use '../../../styles/abstracts' as *;
 
 .legend {
-  margin-bottom: $space-small;
+  margin-bottom: $space-s;
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -11,7 +11,7 @@
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-small;
+  gap: $space-s;
 }
 
 .chip {

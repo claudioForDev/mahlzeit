@@ -22,14 +22,14 @@ body {
 }
 
 main {
-  padding: $space-large $space-medium;
+  padding: $space-l $space-m 200px $space-m;
 
   @include breakpoint(tablet) {
-    padding: $space-large;
+    padding: $space-l $space-l 200px $space-l;
   }
 
   @include breakpoint(desktop) {
-    padding: $space-large 20vw;
+    padding: $space-l 20vw 200px 20vw;
   }
 }
 
