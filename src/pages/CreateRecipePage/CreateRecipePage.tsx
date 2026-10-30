@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore, selectIsAnonymous } from '../../store/authStore';
 import { useRecipeStore, useRecipeActions } from '../../store/recipeStore';
 import { RecipeForm } from '../../components/recipe/RecipeForm/RecipeForm';
@@ -10,10 +10,11 @@ export function CreateRecipePage() {
   const error = useRecipeStore((s) => s.error);
   const { createRecipe } = useRecipeActions();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Nach dem Speichern direkt zum neuen Rezept
-  const handleSubmit = async (input: RecipeInput) => {
-    const id = await createRecipe(input);
+  const handleSubmit = async (input: RecipeInput, image?: File) => {
+    const id = await createRecipe(input, image);
     if (id) navigate(`/rezepte/${id}`);
   };
 
@@ -26,7 +27,10 @@ export function CreateRecipePage() {
       {isAnonymous ? (
         <p>
           Um eigene Rezepte zu erstellen, brauchst du ein Konto.{' '}
-          <Link to="/profil">Jetzt anmelden oder registrieren</Link>
+          {/* from: nach dem Anmelden zurück zum Formular */}
+          <Link to="/profil" state={{ from: location.pathname }}>
+            Jetzt anmelden oder registrieren
+          </Link>
         </p>
       ) : (
         <RecipeForm

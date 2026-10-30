@@ -6,7 +6,8 @@ import {
 import { AuthForm } from '../../components/auth/AuthForm';
 import styles from './ProfilePage.module.scss';
 import { CircleUser } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Pencil, Bell, LifeBuoy, LogOut } from 'lucide-react';
 
 export function ProfilePage() {
@@ -16,6 +17,15 @@ export function ProfilePage() {
   const isAnonymous = useAuthStore(selectIsAnonymous);
   const info = useAuthStore((s) => s.info);
   const { logout } = useAuthActions();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Kam der User über einen "Anmelden"-Link von einer anderen Seite,
+  // nach erfolgreichem Login/Registrieren dorthin zurück
+  const from = (location.state as { from?: string } | null)?.from;
+  useEffect(() => {
+    if (!isAnonymous && from) navigate(from, { replace: true });
+  }, [isAnonymous, from, navigate]);
 
   if (isAnonymous) {
     return (
