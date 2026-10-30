@@ -1,4 +1,10 @@
-import { useState, type SyntheticEvent } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from 'react';
 import { Plus, X } from 'lucide-react';
 import {
   UNITS,
@@ -70,7 +76,7 @@ const removeAt = <T,>(list: T[], index: number) =>
   list.filter((_, i) => i !== index);
 
 interface RecipeFormProps {
-  onSubmit: (input: RecipeInput) => Promise<void>;
+  onSubmit: (input: RecipeInput, image?: File) => Promise<void>;
   submitLabel: string;
   submitting: boolean;
   error: string | null; // Fehler vom Server, z. B. fehlende Berechtigung
@@ -84,6 +90,25 @@ export function RecipeForm({
 }: RecipeFormProps) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  // Datei separat, weil sie nicht zu RecipeInput gehört (wird im Service verkleinert und hochgeladen)
+  const [image, setImage] = useState<File | null>(null);
+
+  // Vorschau als lokale URL; beim Wechsel oder Verlassen wieder freigeben
+  const previewUrl = useMemo(
+    () => (image ? URL.createObjectURL(image) : null),
+    [image],
+  );
+  useEffect(
+    () => () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    },
+    [previewUrl],
+  );
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setImage(e.target.files?.[0] ?? null);
+    e.target.value = ''; // damit dieselbe Datei nach dem Entfernen wieder gewählt werden kann
+  };
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -121,7 +146,7 @@ export function RecipeForm({
     const input = toRecipeInput(form);
     const errors = validateRecipeInput(input);
     setValidationErrors(errors);
-    if (errors.length === 0) await onSubmit(input);
+    if (errors.length === 0) await onSubmit(input, image ?? undefined);
   };
 
   return (
@@ -150,6 +175,33 @@ export function RecipeForm({
           rows={3}
         />
       </label>
+
+      <div className={styles.field}>
+        <span className={styles.label}>Bild</span>
+        {previewUrl && (
+          <img src={previewUrl} alt="Vorschau" className={styles.preview} />
+        )}
+        <div className={styles.imageActions}>
+          <label className="btn btn--default">
+            {image ? 'Bild ändern' : 'Bild hinzufügen'}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+            />
+          </label>
+          {image && (
+            <button
+              type="button"
+              className="btn btn--default"
+              onClick={() => setImage(null)}
+            >
+              Bild entfernen
+            </button>
+          )}
+        </div>
+      </div>
 
       <div className={styles.numbers}>
         <label className={styles.field}>

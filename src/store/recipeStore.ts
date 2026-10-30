@@ -13,7 +13,10 @@ interface RecipeState {
 interface RecipeActions {
   loadRecipes: () => Promise<void>;
   loadRecipe: (id: string) => Promise<void>;
-  createRecipe: (input: RecipeInput) => Promise<string | undefined>; // neue ID, undefined bei Fehler
+  createRecipe: (
+    input: RecipeInput,
+    image?: File,
+  ) => Promise<string | undefined>; // neue ID, undefined bei Fehler
 }
 
 export const useRecipeStore = create<RecipeState>()((set) => {
@@ -46,7 +49,8 @@ export const useRecipeStore = create<RecipeState>()((set) => {
           set({ currentRecipe: await recipeService.getRecipe(id) });
         }),
 
-      createRecipe: (input) => run(() => recipeService.createRecipe(input)),
+      createRecipe: (input, image) =>
+        run(() => recipeService.createRecipe(input, image)),
     },
   };
 });

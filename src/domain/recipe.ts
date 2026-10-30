@@ -59,6 +59,12 @@ export interface Ingredient {
   unit: Unit;
 }
 
+// Eine Grösse des Rezeptbilds, für srcset
+export interface RecipeImage {
+  width: number;
+  url: string;
+}
+
 export interface Recipe {
   id: string;
   title: string;
@@ -73,10 +79,19 @@ export interface Recipe {
   ingredients: Ingredient[];
   steps: string[];
   baseServings: number;
-  imageUrl?: string;
-  imagePath?: string;
+  images?: RecipeImage[]; // aufsteigend nach Breite
+  imageFolder?: string; // Storage-Ordner mit allen Grössen, zum Löschen
   authorId: string;
   createdAt: Timestamp;
+}
+
+//Menge auf eine andere Portionenzahl umrechnen
+export function scaleAmount(
+  amount: number,
+  baseServings: number,
+  servings: number,
+) {
+  return Math.round(((amount * servings) / baseServings) * 10) / 10;
 }
 
 // Was der User im Formular erfasst; abgeleitete Felder und Metadaten setzt der Service
@@ -87,9 +102,27 @@ export type RecipeInput = Omit<
   | 'within'
   | 'authorId'
   | 'createdAt'
-  | 'imageUrl'
-  | 'imagePath'
+  | 'images'
+  | 'imageFolder'
 >;
+
+// Breiten, in denen Rezeptbilder gespeichert werden
+export const IMAGE_WIDTHS = [400, 800, 1200, 1600, 2000];
+
+// Welche Breiten aus einem Original erzeugt werden: nie hochskalieren,
+// ein kleineres Original wird in seiner eigenen Breite gespeichert
+export function targetWidths(
+  originalWidth: number,
+  widths: number[] = IMAGE_WIDTHS,
+): number[] {
+  const result = widths.filter((w) => w < originalWidth);
+  if (originalWidth <= Math.max(...widths)) result.push(originalWidth);
+  return result;
+}
+
+// srcset-Attribut, z. B. "url400 400w, url800 800w"
+export const toSrcSet = (images: RecipeImage[]) =>
+  images.map((i) => `${i.url} ${i.width}w`).join(', ');
 
 // Firestore kann nicht case-insensitive suchen, darum speichern wir den Titel zusätzlich klein geschrieben
 export const toSearchTitle = (title: string) => title.toLowerCase();
