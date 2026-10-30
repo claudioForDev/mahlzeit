@@ -7,23 +7,36 @@ import { RecipesPage } from './pages/RecipesPage/RecipesPage';
 import { FavoritesPage } from './pages/FavoritesPage/FavoritesPage';
 import { EditProfilePage } from './pages/profile/EditProfilePage';
 import { CreateRecipePage } from './pages/CreateRecipePage/CreateRecipePage';
+import { RecipeDetailPage } from './pages/RecipeDetailPage/RecipeDetailPage';
+import { useAuthStore } from './store/authStore';
 
 function App() {
+  const currentUser = useAuthStore((s) => s.currentUser);
+
   return (
     <>
       <Header />
       <Navigation />
       <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/rezepte" element={<RecipesPage />} />
-          <Route path="/favoriten" element={<FavoritesPage />} />
-          <Route path="/erstellen" element={<CreateRecipePage />} />
-          <Route path="/profil" element={<ProfilePage />} />
-          <Route path="/profil/bearbeiten" element={<EditProfilePage />} />
-        </Routes>
+        {/* Seiten erst rendern, wenn Firebase angemeldet hat (auch anonym).
+            So können alle Seiten direkt laden, ohne selbst auf den User zu warten. */}
+        {currentUser ? <AppRoutes /> : <p>Laden …</p>}
       </main>
     </>
+  );
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/rezepte" element={<RecipesPage />} />
+      <Route path="/favoriten" element={<FavoritesPage />} />
+      <Route path="/erstellen" element={<CreateRecipePage />} />
+      <Route path="/profil" element={<ProfilePage />} />
+      <Route path="/profil/bearbeiten" element={<EditProfilePage />} />
+      <Route path="/rezepte/:id" element={<RecipeDetailPage />} />
+    </Routes>
   );
 }
 

@@ -1,0 +1,58 @@
+@use '../../../styles/abstracts' as *;
+
+.ingredients {
+  padding-bottom: $space-m;
+  margin-bottom: $space-m;
+  border-bottom: 1px solid $color-border;
+
+  .ingredientsHeader {
+    display: flex;
+    justify-content: space-between;
+
+    .amount {
+      background-color: $color-border;
+      border-radius: $border-radius-default;
+      padding: $space-xs $space-s;
+      display: flex;
+      gap: $space-s;
+      align-items: center;
+
+      button {
+        background-color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: $font-m;
+      }
+    }
+
+    .servings {
+      font-weight: $font-bold;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-top: $space-l;
+
+    tr {
+      td {
+        border-top: 1px solid $color-border;
+        padding: $space-s 0;
+        vertical-align: top;
+
+        &:nth-child(1) {
+          width: 80%;
+        }
+
+        &:nth-child(2) {
+          font-weight: $font-bold;
+          text-align: right;
+          width: 20%;
+        }
+      }
+    }
+  }
+}

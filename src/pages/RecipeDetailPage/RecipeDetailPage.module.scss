@@ -1,0 +1,158 @@
+@use '../../styles/abstracts' as *;
+
+.recipe {
+  .header {
+    position: relative;
+
+    .heroImage {
+      display: block;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+
+      @include breakpoint(tablet) {
+        aspect-ratio: 7/5;
+      }
+
+      @include breakpoint(desktop) {
+        aspect-ratio: 16/9;
+      }
+
+      @include breakpoint(bigdesktop) {
+        aspect-ratio: 20/9;
+      }
+    }
+
+    .titleArea {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      box-shadow: -50px -50px 200px inset rgba(3, 3, 3, 0.136);
+      padding: $space-s;
+
+      .tagList {
+        display: flex;
+        gap: $space-s;
+        margin: $space-s 0;
+        li {
+          background-color: white;
+          font-weight: $font-bold;
+          font-size: $font-xs;
+          padding: $space-xs $space-s;
+          border: 1px solid $color-secondary;
+          border-radius: $border-radius-default;
+        }
+      }
+
+      .title {
+        margin-bottom: 0;
+        color: white;
+      }
+    }
+
+    .backBtn {
+      position: absolute;
+      top: $space-s;
+      left: $space-s;
+    }
+
+    .favBtn {
+      position: absolute;
+      top: $space-s;
+      right: $space-s;
+    }
+  }
+
+  .additionalInfos {
+    @include section-divider;
+    display: flex;
+    justify-content: space-between;
+    gap: $space-m;
+
+    .times {
+      display: flex;
+
+      .item {
+        text-align: center;
+        padding-right: $space-m;
+
+        &:not(:first-child) {
+          padding-left: $space-m;
+        }
+
+        &:first-child,
+        &:nth-child(2) {
+          border-right: 1px solid $color-border;
+        }
+
+        span {
+          display: block;
+          font-weight: $font-bold;
+
+          &.itemName {
+            font-size: $font-xs;
+            text-transform: uppercase;
+          }
+
+          &.itemTime {
+            font-size: $font-l;
+          }
+
+          &.itemMinutes {
+            font-size: $font-xs;
+          }
+        }
+      }
+    }
+
+    .categories {
+      span {
+        display: block;
+        text-align: center;
+        font-weight: $font-bold;
+      }
+      .mealType {
+        text-transform: uppercase;
+        color: $color-primary;
+      }
+
+      .seasons {
+        font-size: $font-xs;
+      }
+    }
+  }
+
+  .description {
+    @include section-divider;
+  }
+
+  .preparation {
+    @include section-divider;
+
+    ol {
+      counter-reset: counter;
+
+      li {
+        counter-increment: counter;
+        display: flex;
+        margin-top: $space-m;
+
+        &::before {
+          content: counter(counter);
+          background-color: $color-primary;
+          color: white;
+          width: 25px;
+          height: 25px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+          margin-right: $space-m;
+          font-size: $font-xs;
+          font-weight: $font-bold;
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+}
