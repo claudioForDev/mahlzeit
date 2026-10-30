@@ -1,0 +1,18 @@
+@use '../../../styles/abstracts' as *;
+
+.noteForm {
+  @include section-divider;
+
+  .title {
+    margin-bottom: $space-m;
+  }
+
+  .submitBtn {
+    margin: $space-m 0;
+  }
+
+  .notesInfo {
+    font-size: $font-xs;
+    margin-top: $space-xs;
+  }
+}
