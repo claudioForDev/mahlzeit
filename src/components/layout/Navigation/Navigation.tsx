@@ -1,12 +1,12 @@
 // src/components/layout/Navigation/Navigation.tsx
 import { NavLink } from 'react-router-dom';
-import { Home, CookingPot, Flame, Sprout, Egg } from 'lucide-react';
+import { Home, CookingPot, Heart, Sprout, Egg } from 'lucide-react';
 import styles from './Navigation.module.scss';
 
 const items = [
   { to: '/', label: 'Start', icon: Home },
   { to: '/rezepte', label: 'Rezepte', icon: CookingPot },
-  { to: '/favoriten', label: 'Favoriten', icon: Flame },
+  { to: '/favoriten', label: 'Favoriten', icon: Heart },
   { to: '/erstellen', label: 'Erstellen', icon: Sprout },
   { to: '/profil', label: 'Profil', icon: Egg },
 ];
