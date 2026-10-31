@@ -1,10 +1,11 @@
-import { useState, type SyntheticEvent } from 'react';
+import { useEffect, useState, type SyntheticEvent } from 'react';
 import {
   useAuthStore,
   useAuthActions,
   selectIsAnonymous,
 } from '../../store/authStore';
 import { AuthForm } from '../../components/auth/AuthForm';
+import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
 import styles from './ProfilePage.module.scss';
 import { CircleUser } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ export function EditProfilePage() {
     uploadAvatar,
     deleteAvatar,
     deleteAccount,
+    clearMessages,
   } = useAuthActions();
 
   const [editingName, setEditingName] = useState(false);
@@ -32,10 +34,12 @@ export function EditProfilePage() {
   const [deletingAccount, setDeletingAccount] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
 
+  // Clear messages when leaving the page so they don't show up elsewhere
+  useEffect(() => clearMessages, [clearMessages]);
+
   if (isAnonymous) {
     return (
       <div className="profile profile--anonymous">
-        {info && <p className="form__info">{info}</p>}
         <p>
           Registriere dich, um ein Profil zu haben und deine Favoriten dauerhaft
           zu sichern.
@@ -51,16 +55,37 @@ export function EditProfilePage() {
 
   const handleNameSave = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await updateName(name);
-    setEditingName(false);
+    // The form stays open on error
+    if (await updateName(name)) setEditingName(false);
   };
 
   const handlePasswordSave = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await changePassword(currentPassword, newPassword);
+    if (await changePassword(currentPassword, newPassword)) {
+      setCurrentPassword('');
+      setNewPassword('');
+      setEditingPassword(false);
+    }
+  };
+
+  // Cancel: close the form, discard input and hide its messages
+  const cancelName = () => {
+    setName(displayName ?? '');
+    setEditingName(false);
+    clearMessages();
+  };
+
+  const cancelPassword = () => {
     setCurrentPassword('');
     setNewPassword('');
     setEditingPassword(false);
+    clearMessages();
+  };
+
+  const cancelDeleteAccount = () => {
+    setDeletePassword('');
+    setDeletingAccount(false);
+    clearMessages();
   };
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +150,7 @@ export function EditProfilePage() {
               <button
                 type="button"
                 className="btn btn--default"
-                onClick={() => setEditingName(false)}
+                onClick={cancelName}
               >
                 Abbrechen
               </button>
@@ -178,7 +203,7 @@ export function EditProfilePage() {
           <button
             type="button"
             className="btn btn--default"
-            onClick={() => setEditingPassword(false)}
+            onClick={cancelPassword}
           >
             Abbrechen
           </button>
@@ -192,8 +217,8 @@ export function EditProfilePage() {
         </button>
       )}
 
-      {error && <p className="form__error">{error}</p>}
-      {info && <p className="form__info">{info}</p>}
+      {error && <FormMessage type="error">{error}</FormMessage>}
+      {info && <FormMessage type="info">{info}</FormMessage>}
 
       {deletingAccount ? (
         <form onSubmit={handleDeleteAccount} className="form form--profile">
@@ -214,7 +239,7 @@ export function EditProfilePage() {
           <button
             type="button"
             className="btn btn--default"
-            onClick={() => setDeletingAccount(false)}
+            onClick={cancelDeleteAccount}
           >
             Abbrechen
           </button>

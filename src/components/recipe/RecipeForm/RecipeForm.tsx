@@ -18,6 +18,7 @@ import {
   type Unit,
 } from '../../../domain/recipe';
 import { ChipGroup } from '../ChipGroup/ChipGroup';
+import { FormMessage } from '../../ui/FormMessage/FormMessage';
 import styles from './RecipeForm.module.scss';
 
 // Number fields as strings so an empty field stays empty (instead of showing 0)
@@ -369,17 +370,15 @@ export function RecipeForm({
       </fieldset>
 
       {validationErrors.length > 0 && (
-        <ul className="form__error" role="alert">
-          {validationErrors.map((message) => (
-            <li key={message}>{message}</li>
-          ))}
-        </ul>
+        <FormMessage type="error">
+          <ul>
+            {validationErrors.map((message) => (
+              <li key={message}>{message}</li>
+            ))}
+          </ul>
+        </FormMessage>
       )}
-      {error && (
-        <p className="form__error" role="alert">
-          {error}
-        </p>
-      )}
+      {error && <FormMessage type="error">{error}</FormMessage>}
 
       <button type="submit" className={styles.submit} disabled={submitting}>
         {submitting ? 'Wird gespeichert …' : submitLabel}

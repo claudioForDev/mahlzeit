@@ -2,6 +2,7 @@ import { useEffect, useState, type SyntheticEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore, selectIsAnonymous } from '../../../store/authStore';
 import { useNoteStore, useNoteActions } from '../../../store/noteStore';
+import { FormMessage } from '../../ui/FormMessage/FormMessage';
 import styles from './RecipeNotes.module.scss';
 
 interface RecipeNotesProps {
@@ -42,7 +43,7 @@ export function RecipeNotes({ recipeId }: RecipeNotesProps) {
         onChange={(e) => setNote(e.target.value)}
         rows={3}
       />
-      {error && <p className="form__error">{error}</p>}
+      {error && <FormMessage type="error">{error}</FormMessage>}
       {isAnonymous && (
         <p className={styles.notesInfo}>
           {/* from: return to this recipe after login */}

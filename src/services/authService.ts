@@ -33,7 +33,16 @@ export function requireUser() {
 async function reauthenticate(user: User, password: string) {
   if (!user.email) throw new Error('Nicht angemeldet');
   const credential = EmailAuthProvider.credential(user.email, password);
-  await reauthenticateWithCredential(user, credential);
+  try {
+    await reauthenticateWithCredential(user, credential);
+  } catch (e) {
+    // The email is known here, so report more precisely than "email or password is wrong"
+    const code = (e as { code?: string }).code;
+    if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') {
+      throw new Error('Das aktuelle Passwort ist falsch.', { cause: e });
+    }
+    throw e;
+  }
 }
 
 // Fixed path per user, each upload overwrites the old one

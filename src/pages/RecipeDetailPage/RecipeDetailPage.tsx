@@ -12,6 +12,7 @@ import { IngredientList } from '../../components/recipe/IngredientList/Ingredien
 import { RecipeNotes } from '../../components/recipe/RecipeNotes/RecipeNotes';
 import styles from './RecipeDetailPage.module.scss';
 import { ShareButton } from '../../components/recipe/ShareButton/ShareButton';
+import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
 
 export function RecipeDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +29,7 @@ export function RecipeDetailPage() {
   // Only show the matching recipe, not a previously loaded one
   const recipe = currentRecipe?.id === id ? currentRecipe : null;
 
-  if (error) return <p className="form__error">{error}</p>;
+  if (error) return <FormMessage type="error">{error}</FormMessage>;
 
   if (!recipe) {
     return loaded ? (

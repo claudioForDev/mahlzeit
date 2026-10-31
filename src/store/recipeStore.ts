@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Recipe, RecipeInput } from '../domain/recipe';
 import * as recipeService from '../services/recipeService';
+import { getErrorMessage } from '../domain/errors';
 
 interface RecipeState {
   recipes: Recipe[];
@@ -26,7 +27,7 @@ export const useRecipeStore = create<RecipeState>()((set) => {
     try {
       return await fn();
     } catch (e) {
-      set({ error: (e as Error).message });
+      set({ error: getErrorMessage(e) });
     } finally {
       set({ loading: false });
     }

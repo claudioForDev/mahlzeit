@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import * as noteService from '../services/noteService';
+import { getErrorMessage } from '../domain/errors';
 
 interface NoteState {
   text: string;
@@ -19,7 +20,7 @@ export const useNoteStore = create<NoteState>()((set) => {
       await fn();
       return true;
     } catch (e) {
-      set({ error: (e as Error).message });
+      set({ error: getErrorMessage(e) });
       return false;
     }
   };

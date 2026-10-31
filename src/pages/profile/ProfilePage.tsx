@@ -15,7 +15,6 @@ export function ProfilePage() {
   const displayName = useAuthStore((s) => s.displayName);
   const photoURL = useAuthStore((s) => s.photoURL);
   const isAnonymous = useAuthStore(selectIsAnonymous);
-  const info = useAuthStore((s) => s.info);
   const { logout } = useAuthActions();
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +33,6 @@ export function ProfilePage() {
 
         <h1>Profil</h1>
         <div className="profile profile--anonymous">
-          {info && <p className="form__info">{info}</p>}
           <p>
             Registriere dich, um ein Profil zu haben und deine Favoriten
             dauerhaft zu sichern.
