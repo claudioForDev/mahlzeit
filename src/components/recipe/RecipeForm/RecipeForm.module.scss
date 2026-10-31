@@ -32,7 +32,7 @@
   gap: $space-s;
 }
 
-// Zeiten und Portionen: auf dem Handy untereinander, ab Tablet nebeneinander
+// Times and servings: stacked on mobile, side by side from tablet up
 .numbers {
   display: grid;
   gap: $space-m;
@@ -48,7 +48,7 @@
   margin-bottom: $space-s;
 }
 
-// Handy: Zutat über die ganze Breite, darunter Menge und Einheit
+// Mobile: ingredient full width, amount and unit below
 .ingredient {
   display: grid;
   grid-template-columns: 1fr 1fr auto;

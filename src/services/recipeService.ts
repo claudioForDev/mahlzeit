@@ -24,14 +24,14 @@ import {
 
 const recipesCol = collection(db, 'recipes');
 
-// Vorläufige Seitengrösse; richtige Seitenaufteilung kommt mit dem Modul Filterung und Suche
+// Temporary page size; real pagination comes with the filter and search module
 const PAGE_SIZE = 20;
 
 const toRecipe = (snap: DocumentSnapshot) =>
   ({ id: snap.id, ...snap.data() }) as Recipe;
 
-// Bild in mehreren Breiten unter recipes/{uid}/{recipeId}/{breite}.webp hochladen.
-// imageFolder brauchen wir später, um beim Löschen alle Grössen zu entfernen.
+// Upload the image in several widths to recipes/{uid}/{recipeId}/{width}.webp.
+// imageFolder is needed later to remove all sizes when deleting.
 async function uploadRecipeImages(uid: string, recipeId: string, image: File) {
   const imageFolder = `recipes/${uid}/${recipeId}`;
   const bitmap = await readImage(image);
@@ -47,16 +47,16 @@ async function uploadRecipeImages(uid: string, recipeId: string, image: File) {
     );
     return { imageFolder, images };
   } finally {
-    bitmap.close(); // Speicher des dekodierten Bilds freigeben
+    bitmap.close(); // free the memory of the decoded image
   }
 }
 
-// Legt ein Rezept an und gibt die neue ID zurück.
-// Abgeleitete Felder (searchTitle, within) werden hier berechnet, nicht im Formular.
+// Creates a recipe and returns the new ID.
+// Derived fields (searchTitle, within) are computed here, not in the form.
 export async function createRecipe(input: RecipeInput, image?: File) {
   const user = requireUser();
   const title = input.title.trim();
-  // ID vorab erzeugen, damit das Bild schon vor dem Speichern ihren Pfad kennt
+  // Create the ID up front so the image knows its path before saving
   const recipeRef = doc(recipesCol);
   const imageFields = image
     ? await uploadRecipeImages(user.uid, recipeRef.id, image)
@@ -73,7 +73,7 @@ export async function createRecipe(input: RecipeInput, image?: File) {
   return recipeRef.id;
 }
 
-// Neueste Rezepte zuerst
+// Newest recipes first
 export async function listRecipes() {
   const snap = await getDocs(
     query(recipesCol, orderBy('createdAt', 'desc'), limit(PAGE_SIZE)),
@@ -81,7 +81,7 @@ export async function listRecipes() {
   return snap.docs.map(toRecipe);
 }
 
-// Gibt null zurück, wenn es das Rezept nicht (mehr) gibt
+// Returns null if the recipe doesn't exist (anymore)
 export async function getRecipe(id: string) {
   const snap = await getDoc(doc(recipesCol, id));
   return snap.exists() ? toRecipe(snap) : null;

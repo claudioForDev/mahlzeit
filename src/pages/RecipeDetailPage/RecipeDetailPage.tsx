@@ -20,12 +20,12 @@ export function RecipeDetailPage() {
   const error = useRecipeStore((s) => s.error);
   const [loaded, setLoaded] = useState(false);
 
-  // App.tsx rendert die Seite erst, wenn ein User angemeldet ist
+  // App.tsx only renders the page once a user is signed in
   useEffect(() => {
     if (id) loadRecipe(id).then(() => setLoaded(true));
   }, [id, loadRecipe]);
 
-  // Nur das passende Rezept anzeigen, nicht ein zuvor geladenes
+  // Only show the matching recipe, not a previously loaded one
   const recipe = currentRecipe?.id === id ? currentRecipe : null;
 
   if (error) return <p className="form__error">{error}</p>;
@@ -43,10 +43,10 @@ export function RecipeDetailPage() {
     );
   }
 
-  // diets enthält nur ausgewählte Einträge ({ vegan: true }), darum reichen die Schlüssel
+  // diets only contains selected entries ({ vegan: true }), so the keys are enough
   const diets = Object.keys(recipe.diets) as Diet[];
 
-  // Zeiten ohne Wert (0 Min.) nicht anzeigen
+  // Don't show times without a value (0 min)
   const times = [
     { name: 'Vorbereitung', minutes: recipe.prepMinutes },
     { name: 'Kochen', minutes: recipe.cookMinutes },
@@ -72,7 +72,7 @@ export function RecipeDetailPage() {
           zurück
         </Link>
 
-        {/* TODO: Favorisieren, sobald das Modul gebaut ist */}
+        {/* TODO: favorites, once the module is built */}
         <button type="button" className={`btn btn--favorite ${styles.favBtn}`}>
           Favorit
         </button>
@@ -118,7 +118,7 @@ export function RecipeDetailPage() {
         <p className={styles.description}>{recipe.description}</p>
       )}
 
-      {/* key: beim Wechsel zu einem anderen Rezept den State der Komponenten zurücksetzen */}
+      {/* key: reset the components' state when switching to another recipe */}
       <IngredientList
         key={`ingredients-${recipe.id}`}
         ingredients={recipe.ingredients}

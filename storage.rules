@@ -2,7 +2,7 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
 
-    // Profilbild: fester Pfad pro User, jeder Upload überschreibt den alten (kein separates Löschen nötig)
+    // Profile picture: fixed path per user, each upload overwrites the old one (no separate delete needed)
     match /avatars/{uid} {
       allow read: if request.auth != null;
 
@@ -17,7 +17,7 @@ service firebase.storage {
         && request.auth.uid == uid;
     }
 
-    // Rezeptbild in mehreren Breiten (400.webp, 800.webp, …), im Browser verkleinert
+    // Recipe image in several widths (400.webp, 800.webp, …), resized in the browser
     match /recipes/{uid}/{recipeId}/{file} {
       allow read: if request.auth != null;
       allow create, update: if request.auth != null

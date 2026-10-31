@@ -18,8 +18,8 @@ function App() {
       <Header />
       <Navigation />
       <main>
-        {/* Seiten erst rendern, wenn Firebase angemeldet hat (auch anonym).
-            So können alle Seiten direkt laden, ohne selbst auf den User zu warten. */}
+        {/* Only render pages once Firebase has signed in (also anonymously).
+            This way every page can load right away without waiting for the user itself. */}
         {currentUser ? <AppRoutes /> : <p>Laden …</p>}
       </main>
     </>

@@ -1,6 +1,6 @@
-// Bilder im Browser verkleinern, bevor sie hochgeladen werden (Canvas-API)
+// Resize images in the browser before uploading them (Canvas API)
 
-// Datei einlesen
+// Read the file
 export async function readImage(file: File) {
   try {
     return await createImageBitmap(file);
@@ -14,8 +14,8 @@ export async function readImage(file: File) {
 const toBlob = (canvas: HTMLCanvasElement, type: string) =>
   new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, 0.8));
 
-// Auf die gewünschte Breite verkleinern (Seitenverhältnis bleibt) und als WebP exportieren.
-// Safari kann kein WebP erzeugen und liefert dann PNG; in dem Fall nehmen wir JPEG.
+// Resize to the given width (keeps the aspect ratio) and export as WebP.
+// Safari can't encode WebP and returns PNG instead; in that case we use JPEG.
 export async function resizeImage(bitmap: ImageBitmap, width: number) {
   const canvas = document.createElement('canvas');
   canvas.width = width;

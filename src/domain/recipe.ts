@@ -12,7 +12,7 @@ export type Diet =
   'vegetarisch' | 'vegan' | 'laktosefrei' | 'glutenfrei' | 'gesund';
 export type Within = 'max15' | 'max30' | 'max60';
 
-// Anzeigetexte; die Reihenfolge bestimmt auch die Reihenfolge im UI
+// Display labels; the order also defines the order in the UI
 export const MEAL_TYPE_LABELS: Record<MealType, string> = {
   fruehstueck: 'Frühstück',
   snack: 'Snack',
@@ -59,7 +59,7 @@ export interface Ingredient {
   unit: Unit;
 }
 
-// Eine Grösse des Rezeptbilds, für srcset
+// One size of the recipe image, for srcset
 export interface RecipeImage {
   width: number;
   url: string;
@@ -79,13 +79,13 @@ export interface Recipe {
   ingredients: Ingredient[];
   steps: string[];
   baseServings: number;
-  images?: RecipeImage[]; // aufsteigend nach Breite
-  imageFolder?: string; // Storage-Ordner mit allen Grössen, zum Löschen
+  images?: RecipeImage[]; // ascending by width
+  imageFolder?: string; // Storage folder with all sizes, for deleting
   authorId: string;
   createdAt: Timestamp;
 }
 
-//Menge auf eine andere Portionenzahl umrechnen
+// Scale an amount to a different number of servings
 export function scaleAmount(
   amount: number,
   baseServings: number,
@@ -94,7 +94,7 @@ export function scaleAmount(
   return Math.round(((amount * servings) / baseServings) * 10) / 10;
 }
 
-// Was der User im Formular erfasst; abgeleitete Felder und Metadaten setzt der Service
+// What the user enters in the form; the service sets derived fields and metadata
 export type RecipeInput = Omit<
   Recipe,
   | 'id'
@@ -106,11 +106,11 @@ export type RecipeInput = Omit<
   | 'imageFolder'
 >;
 
-// Breiten, in denen Rezeptbilder gespeichert werden
+// Widths in which recipe images are stored
 export const IMAGE_WIDTHS = [400, 800, 1200, 1600, 2000];
 
-// Welche Breiten aus einem Original erzeugt werden: nie hochskalieren,
-// ein kleineres Original wird in seiner eigenen Breite gespeichert
+// Which widths to generate from an original: never upscale,
+// a smaller original is stored at its own width
 export function targetWidths(
   originalWidth: number,
   widths: number[] = IMAGE_WIDTHS,
@@ -120,14 +120,14 @@ export function targetWidths(
   return result;
 }
 
-// srcset-Attribut, z. B. "url400 400w, url800 800w"
+// srcset attribute, e.g. "url400 400w, url800 800w"
 export const toSrcSet = (images: RecipeImage[]) =>
   images.map((i) => `${i.url} ${i.width}w`).join(', ');
 
-// Firestore kann nicht case-insensitive suchen, darum speichern wir den Titel zusätzlich klein geschrieben
+// Firestore can't search case-insensitively, so we also store the title in lowercase
 export const toSearchTitle = (title: string) => title.toLowerCase();
 
-// Kumulative Flags, damit sich mit einer einfachen where('within.max30', '==', true)-Abfrage filtern lässt
+// Cumulative flags so a simple where('within.max30', '==', true) query can filter
 export function computeWithin(
   totalMinutes: number,
 ): Partial<Record<Within, true>> {
@@ -138,7 +138,7 @@ export function computeWithin(
   return within;
 }
 
-// Gibt die Fehlermeldungen zurück; leeres Array = gültig
+// Returns the error messages; empty array = valid
 export function validateRecipeInput(input: RecipeInput): string[] {
   const errors: string[] = [];
   if (!input.title.trim()) errors.push('Titel fehlt.');

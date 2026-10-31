@@ -7,12 +7,12 @@ interface NoteState {
   error: string | null;
   actions: {
     loadNote: (recipeId: string) => Promise<void>;
-    saveNote: (recipeId: string, text: string) => Promise<boolean>; // true = gespeichert
+    saveNote: (recipeId: string, text: string) => Promise<boolean>; // true = saved
   };
 }
 
 export const useNoteStore = create<NoteState>()((set) => {
-  // Gibt zurück, ob die Aktion geklappt hat, damit die UI z. B. Eingaben nur bei Erfolg zurücksetzt
+  // Returns whether the action succeeded, e.g. so the UI only resets input on success
   const run = async (fn: () => Promise<void>) => {
     set({ error: null });
     try {

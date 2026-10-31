@@ -20,7 +20,7 @@ import {
 import { ChipGroup } from '../ChipGroup/ChipGroup';
 import styles from './RecipeForm.module.scss';
 
-// Zahlenfelder als String, damit ein leeres Feld leer bleibt (statt 0 anzuzeigen)
+// Number fields as strings so an empty field stays empty (instead of showing 0)
 interface IngredientRow {
   name: string;
   amount: string;
@@ -52,7 +52,7 @@ const EMPTY_FORM: FormState = {
   steps: [''],
 };
 
-// Strings in Zahlen umwandeln und leere Zeilen weglassen
+// Convert strings to numbers and drop empty rows
 function toRecipeInput(form: FormState): RecipeInput {
   return {
     ...form,
@@ -79,7 +79,7 @@ interface RecipeFormProps {
   onSubmit: (input: RecipeInput, image?: File) => Promise<void>;
   submitLabel: string;
   submitting: boolean;
-  error: string | null; // Fehler vom Server, z. B. fehlende Berechtigung
+  error: string | null; // server error, e.g. missing permission
 }
 
 export function RecipeForm({
@@ -90,10 +90,10 @@ export function RecipeForm({
 }: RecipeFormProps) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
-  // Datei separat, weil sie nicht zu RecipeInput gehört (wird im Service verkleinert und hochgeladen)
+  // File kept separately because it isn't part of RecipeInput (resized and uploaded in the service)
   const [image, setImage] = useState<File | null>(null);
 
-  // Vorschau als lokale URL; beim Wechsel oder Verlassen wieder freigeben
+  // Preview as a local URL; revoked on change or unmount
   const previewUrl = useMemo(
     () => (image ? URL.createObjectURL(image) : null),
     [image],
@@ -107,7 +107,7 @@ export function RecipeForm({
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files?.[0] ?? null);
-    e.target.value = ''; // damit dieselbe Datei nach dem Entfernen wieder gewählt werden kann
+    e.target.value = ''; // so the same file can be picked again after removing it
   };
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
@@ -135,7 +135,7 @@ export function RecipeForm({
         : [...form.seasons, season],
     );
 
-  // diets ist eine Map { vegan: true }, damit Firestore danach filtern kann; abgewählt = Schlüssel entfernen
+  // diets is a map { vegan: true } so Firestore can filter by it; deselected = remove the key
   const toggleDiet = (diet: Diet) => {
     const { [diet]: wasSelected, ...rest } = form.diets;
     update('diets', wasSelected ? rest : { ...form.diets, [diet]: true });

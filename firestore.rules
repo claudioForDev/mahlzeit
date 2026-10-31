@@ -8,7 +8,7 @@ service cloud.firestore {
     }
     function isRegistered() { return signedIn() && !isAnonymous(); }
 
-    // Kein eigenes Profil-Dokument unter users/{uid} nötig: Name und E-Mail stecken in Firebase Auth.
+    // No separate profile document under users/{uid} needed: name and email live in Firebase Auth.
 
     match /users/{uid}/favorites/{recipeId} {
       allow read, write: if signedIn() && request.auth.uid == uid;

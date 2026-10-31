@@ -148,7 +148,7 @@ export function EditProfilePage() {
       </div>
 
       <div className="profile__stats">
-        {/* TODO: Werte aus recipeStore / favoriteStore, sobald Rezept CRUD und Favorisieren gebaut sind */}
+        {/* TODO: values from recipeStore / favoriteStore once recipe CRUD and favorites are built */}
         <p>Rezepte: –</p>
         <p>Favoriten: –</p>
       </div>

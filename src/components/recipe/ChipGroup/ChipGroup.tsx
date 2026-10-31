@@ -3,13 +3,13 @@ import styles from './ChipGroup.module.scss';
 interface ChipGroupProps<T extends string> {
   legend: string;
   name: string;
-  type: 'radio' | 'checkbox'; // radio = Einfachauswahl, checkbox = Mehrfachauswahl
-  options: Record<T, string>; // Wert -> Anzeigetext
+  type: 'radio' | 'checkbox'; // radio = single choice, checkbox = multiple choice
+  options: Record<T, string>; // value -> label
   isSelected: (value: T) => boolean;
   onToggle: (value: T) => void;
 }
 
-// Auswahl als "Chips". Technisch echte Radio-/Checkbox-Inputs, damit Tastatur und Screenreader funktionieren.
+// Selection as "chips". Real radio/checkbox inputs under the hood so keyboard and screen readers work.
 export function ChipGroup<T extends string>({
   legend,
   name,

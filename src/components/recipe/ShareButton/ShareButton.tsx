@@ -6,7 +6,7 @@ interface ShareButtonProps {
   className?: string;
 }
 
-// Natives Teilen-Menü (Handy, Safari, Edge); sonst Link in die Zwischenablage kopieren
+// Native share sheet (mobile, Safari, Edge); otherwise copy the link to the clipboard
 export function ShareButton({ title, className }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -17,7 +17,7 @@ export function ShareButton({ title, className }: ShareButtonProps) {
       try {
         await navigator.share({ title, url });
       } catch {
-        // User hat das Teilen-Menü geschlossen, kein Fehler
+        // user closed the share sheet, not an error
       }
       return;
     }

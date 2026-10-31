@@ -12,7 +12,7 @@ export function CreateRecipePage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Nach dem Speichern direkt zum neuen Rezept
+  // Go straight to the new recipe after saving
   const handleSubmit = async (input: RecipeInput, image?: File) => {
     const id = await createRecipe(input, image);
     if (id) navigate(`/rezepte/${id}`);
@@ -23,11 +23,11 @@ export function CreateRecipePage() {
       <title>Rezept erstellen | mahlzeit</title>
       <h1>Rezept erstellen</h1>
 
-      {/* Die Security Rules erlauben das Erstellen nur registrierten Usern */}
+      {/* The security rules only allow registered users to create recipes */}
       {isAnonymous ? (
         <p>
           Um eigene Rezepte zu erstellen, brauchst du ein Konto.{' '}
-          {/* from: nach dem Anmelden zurück zum Formular */}
+          {/* from: return to the form after login */}
           <Link to="/profil" state={{ from: location.pathname }}>
             Jetzt anmelden oder registrieren
           </Link>

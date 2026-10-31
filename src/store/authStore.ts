@@ -3,11 +3,11 @@ import type { User } from 'firebase/auth';
 import * as authService from '../services/authService';
 
 interface AuthState {
-  currentUser: User | undefined; // undefined = wird noch geladen
+  currentUser: User | undefined; // undefined = still loading
   displayName: string | null;
   photoURL: string | null;
   error: string | null;
-  info: string | null; // Erfolgsmeldung, z. B. nach "Passwort vergessen"
+  info: string | null; // success message, e.g. after "forgot password"
   actions: AuthActions;
 }
 
@@ -27,7 +27,7 @@ interface AuthActions {
 }
 
 export const useAuthStore = create<AuthState>()((set) => {
-  // Gemeinsames Error-Handling: Meldungen zurücksetzen, Fehler in den Store schreiben
+  // Shared error handling: reset messages, write errors to the store
   const run = async (fn: () => Promise<unknown>) => {
     set({ error: null, info: null });
     try {

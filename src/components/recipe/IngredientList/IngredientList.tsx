@@ -7,8 +7,8 @@ interface IngredientListProps {
   baseServings: number;
 }
 
-// Zutaten mit Portionenrechner; die Mengen werden aus den Originalwerten berechnet, nie gespeichert.
-// Mit key={recipe.id} einbinden, damit die gewählten Portionen beim Rezeptwechsel zurückgesetzt werden.
+// Ingredients with servings calculator; amounts are computed from the original values, never stored.
+// Render with key={recipe.id} so the selected servings reset when the recipe changes.
 export function IngredientList({
   ingredients,
   baseServings,

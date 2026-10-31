@@ -20,8 +20,8 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Kam der User über einen "Anmelden"-Link von einer anderen Seite,
-  // nach erfolgreichem Login/Registrieren dorthin zurück
+  // If the user came from another page via a login link,
+  // send them back there after a successful login/registration
   const from = (location.state as { from?: string } | null)?.from;
   useEffect(() => {
     if (!isAnonymous && from) navigate(from, { replace: true });

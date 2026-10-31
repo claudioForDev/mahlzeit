@@ -32,7 +32,7 @@
     outline-offset: 2px;
   }
 
-  // Doppelte Klasse, damit der Input-Reset aus _forms.scss (.form input) überschrieben wird
+  // Doubled class to override the input reset from _forms.scss (.form input)
   .input {
     position: absolute;
     width: 1px;

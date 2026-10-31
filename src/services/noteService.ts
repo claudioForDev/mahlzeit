@@ -2,11 +2,11 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { requireUser } from './authService';
 
-// Pro User und Rezept genau eine Notiz, Rezept-ID = Dokument-ID
+// Exactly one note per user and recipe, recipe ID = document ID
 const noteRef = (uid: string, recipeId: string) =>
   doc(db, 'users', uid, 'notes', recipeId);
 
-// Leerer String, wenn noch keine Notiz existiert
+// Empty string if there's no note yet
 export async function getNote(recipeId: string) {
   const snap = await getDoc(noteRef(requireUser().uid, recipeId));
   return snap.exists() ? (snap.data().text as string) : '';

@@ -22,25 +22,25 @@ import {
 } from 'firebase/storage';
 import { auth, storage } from '../firebase';
 
-// Gibt den angemeldeten User zurück oder wirft einen Fehler
+// Returns the signed-in user or throws an error
 export function requireUser() {
   const user = auth.currentUser;
   if (!user) throw new Error('Nicht angemeldet');
   return user;
 }
 
-// Firebase verlangt für heikle Aktionen (Passwort ändern, Konto löschen) eine frische Anmeldung
+// Firebase requires a fresh sign-in for sensitive actions (change password, delete account)
 async function reauthenticate(user: User, password: string) {
   if (!user.email) throw new Error('Nicht angemeldet');
   const credential = EmailAuthProvider.credential(user.email, password);
   await reauthenticateWithCredential(user, credential);
 }
 
-// Fester Pfad pro User, jeder Upload überschreibt den alten
+// Fixed path per user, each upload overwrites the old one
 const avatarRef = (uid: string) => ref(storage, `avatars/${uid}`);
 
-// Ist niemand angemeldet, wird automatisch anonym angemeldet.
-// Das feuert danach onAuthStateChanged erneut, diesmal mit dem neuen User.
+// If nobody is signed in, sign in anonymously automatically.
+// That fires onAuthStateChanged again, this time with the new user.
 export function watchAuth(callback: (user: User) => void) {
   return onAuthStateChanged(auth, (user) => {
     if (user) callback(user);
@@ -51,14 +51,14 @@ export function watchAuth(callback: (user: User) => void) {
 export const login = (email: string, password: string) =>
   signInWithEmailAndPassword(auth, email, password);
 
-// Löst den "Passwort zurücksetzen"-Mail-Flow von Firebase aus (Link führt zu einer von Firebase gehosteten Seite)
+// Triggers Firebase's password reset email flow (the link leads to a page hosted by Firebase)
 export const resetPassword = (email: string) =>
   sendPasswordResetEmail(auth, email);
 
-// Registrieren aus einem bestehenden anonymen Konto heraus:
-// die UID bleibt gleich, vorhandene Daten (z. B. Favoriten) bleiben erhalten.
-// War niemand anonym angemeldet, legt es einfach ein neues Konto an.
-// Der Name wird direkt mitgesetzt (Firebase Auth, kein eigenes Firestore-Dokument nötig).
+// Register from an existing anonymous account:
+// the UID stays the same, existing data (e.g. favorites) is kept.
+// If nobody was signed in anonymously, it simply creates a new account.
+// The name is set right away (Firebase Auth, no separate Firestore document needed).
 export async function register(email: string, password: string, name: string) {
   const current = auth.currentUser;
   const credential = EmailAuthProvider.credential(email, password);
@@ -66,17 +66,17 @@ export async function register(email: string, password: string, name: string) {
     ? await linkWithCredential(current, credential)
     : await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(result.user, { displayName: name });
-  await result.user.getIdToken(true); // Token neu holen, sonst steht sign_in_provider noch auf 'anonymous'
+  await result.user.getIdToken(true); // refresh the token, otherwise sign_in_provider is still 'anonymous'
   await sendEmailVerification(result.user);
   return result;
 }
 
-// Name nachträglich ändern (Profil bearbeiten)
+// Change the name later (edit profile)
 export async function updateName(name: string) {
   await updateProfile(requireUser(), { displayName: name });
 }
 
-// Passwort ändern: Firebase verlangt dafür eine frische Anmeldung (Re-Authentifizierung)
+// Change password: Firebase requires a fresh sign-in (re-authentication)
 export async function changePassword(
   currentPassword: string,
   newPassword: string,
@@ -86,7 +86,7 @@ export async function changePassword(
   await updatePassword(user, newPassword);
 }
 
-// Profilbild hochladen
+// Upload profile picture
 export async function uploadAvatar(file: File) {
   const user = requireUser();
   const fileRef = avatarRef(user.uid);
@@ -96,15 +96,15 @@ export async function uploadAvatar(file: File) {
   return photoURL;
 }
 
-// Profilbild löschen: Datei aus Storage entfernen und photoURL zurücksetzen
+// Delete profile picture: remove the file from Storage and reset photoURL
 export async function deleteAvatar() {
   const user = requireUser();
   await deleteObject(avatarRef(user.uid));
-  await updateProfile(user, { photoURL: '' }); // '' statt null – Emulator akzeptiert sonst das JSON nicht
+  await updateProfile(user, { photoURL: '' }); // '' instead of null – otherwise the emulator rejects the JSON
 }
 
-// Konto endgültig löschen. Rezepte dieses Users bleiben in Firestore stehen
-// (authorId zeigt dann auf eine nicht mehr existierende UID, siehe datenmodell.md).
+// Delete the account permanently. This user's recipes stay in Firestore
+// (authorId then points to a UID that no longer exists, see datenmodell.md).
 export async function deleteAccount(currentPassword: string) {
   const user = requireUser();
   await reauthenticate(user, currentPassword);
@@ -112,7 +112,7 @@ export async function deleteAccount(currentPassword: string) {
     try {
       await deleteObject(avatarRef(user.uid));
     } catch {
-      // kein Avatar vorhanden oder schon weg
+      // no avatar or already gone
     }
   }
   await deleteUser(user);

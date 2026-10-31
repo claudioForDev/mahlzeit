@@ -4,7 +4,7 @@ import * as recipeService from '../services/recipeService';
 
 interface RecipeState {
   recipes: Recipe[];
-  currentRecipe: Recipe | null; // Detailansicht; null = nicht geladen oder nicht gefunden
+  currentRecipe: Recipe | null; // detail view; null = not loaded or not found
   loading: boolean;
   error: string | null;
   actions: RecipeActions;
@@ -16,11 +16,11 @@ interface RecipeActions {
   createRecipe: (
     input: RecipeInput,
     image?: File,
-  ) => Promise<string | undefined>; // neue ID, undefined bei Fehler
+  ) => Promise<string | undefined>; // new ID, undefined on error
 }
 
 export const useRecipeStore = create<RecipeState>()((set) => {
-  // Gemeinsames Loading- und Error-Handling, analog zum authStore
+  // Shared loading and error handling, like in authStore
   const run = async <T>(fn: () => Promise<T>) => {
     set({ loading: true, error: null });
     try {

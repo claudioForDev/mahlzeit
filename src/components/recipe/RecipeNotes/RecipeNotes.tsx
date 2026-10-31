@@ -8,8 +8,8 @@ interface RecipeNotesProps {
   recipeId: string;
 }
 
-// Persönliche Notiz zum Rezept, pro User gespeichert (auch anonym).
-// Mit key={recipeId} einbinden, damit der State beim Rezeptwechsel zurückgesetzt wird.
+// Personal note on a recipe, stored per user (also anonymous).
+// Render with key={recipeId} so the state resets when the recipe changes.
 export function RecipeNotes({ recipeId }: RecipeNotesProps) {
   const isAnonymous = useAuthStore(selectIsAnonymous);
   const location = useLocation();
@@ -17,7 +17,7 @@ export function RecipeNotes({ recipeId }: RecipeNotesProps) {
   const saving = useNoteStore((s) => s.saving);
   const error = useNoteStore((s) => s.error);
   const { loadNote, saveNote } = useNoteActions();
-  const [note, setNote] = useState<string | null>(null); // null = unverändert
+  const [note, setNote] = useState<string | null>(null); // null = unchanged
 
   useEffect(() => {
     loadNote(recipeId);
@@ -28,7 +28,7 @@ export function RecipeNotes({ recipeId }: RecipeNotesProps) {
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const saved = await saveNote(recipeId, noteText);
-    if (saved) setNote(null); // bei einem Fehler bleibt der getippte Text stehen
+    if (saved) setNote(null); // on error, the typed text is kept
   };
 
   return (
@@ -45,7 +45,7 @@ export function RecipeNotes({ recipeId }: RecipeNotesProps) {
       {error && <p className="form__error">{error}</p>}
       {isAnonymous && (
         <p className={styles.notesInfo}>
-          {/* from: nach dem Anmelden zurück zu diesem Rezept */}
+          {/* from: return to this recipe after login */}
           <Link to="/profil" state={{ from: location.pathname }}>
             Registriere dich
           </Link>
