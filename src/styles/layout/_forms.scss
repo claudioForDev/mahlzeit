@@ -8,13 +8,14 @@
     display: block;
     color: inherit;
     letter-spacing: inherit;
-    margin: 0;
+    margin: $space-xs 0 0;
     padding: $space-s;
-    border: none;
+    border: 1px solid $color-border;
     background: white;
     border-radius: $border-radius-small;
     appearance: none;
     width: 100%;
+    font-size: $font-s;
   }
 
   button,
@@ -31,6 +32,14 @@
     min-width: 0;
   }
 
+  label {
+    display: block;
+    text-transform: uppercase;
+    font-weight: $font-bold;
+    font-size: $font-xs;
+    margin: $space-s 0 0;
+  }
+
   legend {
     padding: 0;
   }
@@ -40,8 +49,8 @@
   }
 
   ::placeholder {
-    color: currentColor;
-    opacity: 0.5;
+    color: $color-text-light;
+    font-weight: $font-light;
   }
 
   :disabled,
@@ -49,4 +58,31 @@
     cursor: not-allowed;
     opacity: 0.5;
   }
+}
+
+// Messages, also usable outside of forms
+.form__error,
+.form__info {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-xs;
+  margin: $space-s 0;
+  padding: $space-s $space-m;
+  border-left: 4px solid;
+  border-radius: $border-radius-small;
+  font-size: $font-s;
+}
+
+.form__error {
+  color: $color-error;
+  background-color: $color-error-bg;
+}
+
+.form__info {
+  color: $color-success;
+  background-color: $color-success-bg;
+}
+
+.form__icon {
+  flex-shrink: 0; // keeps the icon from shrinking with long text
 }

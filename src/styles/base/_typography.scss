@@ -31,3 +31,15 @@ h1 {
 h2 {
   font-size: $font-m;
 }
+
+h1,
+h2,
+h3,
+h4 {
+  color: black;
+}
+
+a {
+  color: $color-primary;
+  text-decoration: underline;
+}

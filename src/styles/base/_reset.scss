@@ -10,6 +10,10 @@
   margin: 0;
 }
 
+html {
+  font-size: 15px;
+}
+
 html,
 body {
   height: 100%;
@@ -19,6 +23,7 @@ body {
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
   background-color: $color-paper;
+  color: $color-text;
 }
 
 main {

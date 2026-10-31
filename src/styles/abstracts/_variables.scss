@@ -1,9 +1,16 @@
 // Colors
 $color-paper: #f7f4ec; // background
-$color-text: #2b2620; // main text color
+$color-text: #464646; // main text color
+$color-text-light: #7d7d7d;
 $color-primary: #7a8450; // main accent
+$color-primary-hover: #4b5130;
 $color-border: #e4dfd3; // subtle dividers
 $color-secondary: rgb(206, 69, 0);
+
+$color-error: #b3261e;
+$color-error-bg: white;
+$color-success: $color-primary;
+$color-success-bg: white;
 
 // Border radius
 $border-radius-default: 15px;
@@ -24,6 +31,9 @@ $font-l: 1.5rem;
 $font-xl: 2rem;
 
 // Font weights
-$font-light: 300;
+$font-light: 400;
 $font-reg: 500;
-$font-bold: 700;
+$font-bold: 600;
+
+// Transitions
+$transition-default: 0.3s ease-out;
