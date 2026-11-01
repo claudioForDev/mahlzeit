@@ -29,7 +29,38 @@
 .imageActions {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-s;
+  gap: $space-m;
+}
+
+// Nested in .recipeForm to beat the global `.form label` styles (display, font, margin)
+.recipeForm .dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-xs;
+  margin: 0;
+  font-size: $font-s;
+  text-transform: none;
+  padding: $space-l $space-m;
+  border: 2px dashed $color-border;
+  border-radius: $border-radius-default;
+  background: white;
+  color: $color-primary;
+  cursor: pointer;
+  transition: $transition-default;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+}
+
+.dropzoneText {
+  font-weight: $font-bold;
+}
+
+.dropzoneHint {
+  font-size: $font-xs;
+  color: $color-text-light;
 }
 
 // Times and servings: stacked on mobile, side by side from tablet up
@@ -95,14 +126,5 @@
   border: none;
   background: none;
   color: $color-primary;
-  font-weight: 600;
-}
-
-.submit {
-  padding: 14px;
-  border: none;
-  border-radius: $border-radius-small;
-  background: $color-primary;
-  color: white;
   font-weight: 600;
 }

@@ -5,7 +5,7 @@ import {
   type ChangeEvent,
   type SyntheticEvent,
 } from 'react';
-import { Plus, X } from 'lucide-react';
+import { ImagePlus, Plus, X } from 'lucide-react';
 import {
   UNITS,
   MEAL_TYPE_LABELS,
@@ -179,29 +179,42 @@ export function RecipeForm({
 
       <div className={styles.field}>
         <span className={styles.label}>Bild</span>
-        {previewUrl && (
-          <img src={previewUrl} alt="Vorschau" className={styles.preview} />
-        )}
-        <div className={styles.imageActions}>
-          <label className="btn btn--default">
-            {image ? 'Bild ändern' : 'Bild hinzufügen'}
+        {previewUrl ? (
+          <>
+            <img src={previewUrl} alt="Vorschau" className={styles.preview} />
+            <div className={styles.imageActions}>
+              <label className="btn btn--link">
+                Bild ändern
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="visually-hidden"
+                />
+              </label>
+              <button
+                type="button"
+                className="btn btn--link"
+                onClick={() => setImage(null)}
+              >
+                Bild entfernen
+              </button>
+            </div>
+          </>
+        ) : (
+          // The whole box is the label, so clicking anywhere opens the file picker
+          <label className={styles.dropzone}>
+            <ImagePlus size={32} strokeWidth={1.5} aria-hidden="true" />
+            <span className={styles.dropzoneText}>Bild hinzufügen</span>
+            <span className={styles.dropzoneHint}>JPG, PNG oder WebP</span>
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              hidden
+              className="visually-hidden"
             />
           </label>
-          {image && (
-            <button
-              type="button"
-              className="btn btn--default"
-              onClick={() => setImage(null)}
-            >
-              Bild entfernen
-            </button>
-          )}
-        </div>
+        )}
       </div>
 
       <div className={styles.numbers}>
@@ -380,7 +393,7 @@ export function RecipeForm({
       )}
       {error && <FormMessage type="error">{error}</FormMessage>}
 
-      <button type="submit" className={styles.submit} disabled={submitting}>
+      <button type="submit" className="btn btn--submit" disabled={submitting}>
         {submitting ? 'Wird gespeichert …' : submitLabel}
       </button>
     </form>

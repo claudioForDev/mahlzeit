@@ -33,6 +33,12 @@
     &:hover {
       background-color: $color-primary-hover;
     }
+
+    // e.g. while the form is being saved
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   &--default {

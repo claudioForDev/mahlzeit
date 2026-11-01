@@ -124,7 +124,7 @@ export function EditProfilePage() {
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarChange}
-                hidden
+                className="visually-hidden"
               />
             </label>
             {photoURL && (

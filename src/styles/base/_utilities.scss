@@ -1,0 +1,21 @@
+@use '../abstracts' as *;
+
+// Visually hidden but still reachable with the keyboard and screen readers
+// (unlike the hidden attribute or display: none).
+// !important so that element styles like `.form input` can't override it
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+// The file input itself is invisible, so show its keyboard focus on the label
+label:has(> .visually-hidden:focus-visible) {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
