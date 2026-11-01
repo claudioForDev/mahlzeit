@@ -6,8 +6,9 @@ import {
 } from '../../store/authStore';
 import { AuthForm } from '../../components/auth/AuthForm';
 import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
-import styles from './ProfilePage.module.scss';
-import { CircleUser } from 'lucide-react';
+import { Avatar } from '../../components/ui/Avatar/Avatar';
+import styles from './EditProfilePage.module.scss';
+import { ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function EditProfilePage() {
@@ -91,6 +92,7 @@ export function EditProfilePage() {
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) await uploadAvatar(file);
+    e.target.value = ''; // so the same file can be picked again
   };
 
   const handleDeleteAccount = async (e: SyntheticEvent<HTMLFormElement>) => {
@@ -103,41 +105,50 @@ export function EditProfilePage() {
     <>
       <title>Profil bearbeiten | mahlzeit</title>
 
-      <h1>Profil</h1>
-      <Link to="/profil">zurück</Link>
+      <Link to="/profil" className={`btn btn--link ${styles.backLink}`}>
+        <ChevronLeft size={16} aria-hidden="true" />
+        Zurück zum Profil
+      </Link>
+      <h1>Profil bearbeiten</h1>
 
-      <div className={styles.profile}>
-        <div>
-          {photoURL ? (
-            <img
-              src={photoURL}
-              alt="Profilbild"
-              className={styles.profileImg}
-            />
-          ) : (
-            <span className={`${styles.profileImg} ${styles.empty}`}>
-              <CircleUser size={40} strokeWidth={1.5} />
-            </span>
-          )}
+      {/* At the top so the message is visible no matter which section was changed */}
+      {error && <FormMessage type="error">{error}</FormMessage>}
+      {info && <FormMessage type="info">{info}</FormMessage>}
 
-          <label className="btn btn--default">
-            {photoURL ? 'Profilbild ändern' : 'Profilbild hinzufügen'}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              hidden
-            />
-          </label>
-          {photoURL && (
-            <button className="btn btn--default" onClick={deleteAvatar}>
-              Profilbild löschen
-            </button>
-          )}
+      <section className={styles.section}>
+        <h2>Profilbild</h2>
+        <div className={`${styles.item} ${styles.avatar}`}>
+          <Avatar photoURL={photoURL} />
+
+          <div className={styles.actions}>
+            <label className="btn btn--link">
+              {photoURL ? 'Bild ändern' : 'Bild hinzufügen'}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+                hidden
+              />
+            </label>
+            {photoURL && (
+              <button
+                type="button"
+                className="btn btn--link"
+                onClick={deleteAvatar}
+              >
+                Bild löschen
+              </button>
+            )}
+          </div>
         </div>
-        <div>
-          {editingName ? (
-            <form onSubmit={handleNameSave} className="form form--profile">
+      </section>
+
+      <section className={styles.section}>
+        <h2>Persönliche Daten</h2>
+
+        {editingName ? (
+          <form onSubmit={handleNameSave} className={`form ${styles.item}`}>
+            <div className={styles.editForm}>
               <label>
                 Name
                 <input
@@ -146,112 +157,165 @@ export function EditProfilePage() {
                   required
                 />
               </label>
-              <button type="submit">Speichern</button>
-              <button
-                type="button"
-                className="btn btn--default"
-                onClick={cancelName}
-              >
-                Abbrechen
-              </button>
-            </form>
-          ) : (
-            <>
-              <h2>{displayName}</h2>
-              <button
-                className="btn btn--default"
-                onClick={() => setEditingName(true)}
-              >
-                Name bearbeiten
-              </button>
-            </>
-          )}
+              <div className={styles.actions}>
+                <button type="submit" className="btn btn--default">
+                  Speichern
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--link"
+                  onClick={cancelName}
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          </form>
+        ) : (
+          <div className={styles.item}>
+            <div>
+              <span className={styles.label}>Name</span>
+              <span>{displayName}</span>
+            </div>
+            <button
+              type="button"
+              className="btn btn--link"
+              onClick={() => setEditingName(true)}
+            >
+              Bearbeiten
+            </button>
+          </div>
+        )}
 
-          <p>{currentUser?.email}</p>
-          {memberSince && <p>Mitglied seit {memberSince}</p>}
+        <div className={styles.item}>
+          <div>
+            <span className={styles.label}>E-Mail</span>
+            <span>{currentUser?.email}</span>
+          </div>
         </div>
-      </div>
 
-      <div className="profile__stats">
-        {/* TODO: values from recipeStore / favoriteStore once recipe CRUD and favorites are built */}
-        <p>Rezepte: –</p>
-        <p>Favoriten: –</p>
-      </div>
+        {memberSince && (
+          <div className={styles.item}>
+            <div>
+              <span className={styles.label}>Mitglied seit</span>
+              <span>{memberSince}</span>
+            </div>
+          </div>
+        )}
+      </section>
 
-      {editingPassword ? (
-        <form onSubmit={handlePasswordSave} className="form form--profile">
-          <label>
-            Aktuelles Passwort
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Neues Passwort
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              minLength={6}
-              required
-            />
-          </label>
-          <button type="submit">Speichern</button>
-          <button
-            type="button"
-            className="btn btn--default"
-            onClick={cancelPassword}
+      <section className={styles.section}>
+        <h2>Sicherheit</h2>
+
+        {editingPassword ? (
+          <form onSubmit={handlePasswordSave} className={`form ${styles.item}`}>
+            <div className={styles.editForm}>
+              <label>
+                Aktuelles Passwort
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Neues Passwort
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="Mindestens 6 Zeichen"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  minLength={6}
+                  required
+                />
+              </label>
+              <div className={styles.actions}>
+                <button type="submit" className="btn btn--default">
+                  Speichern
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--link"
+                  onClick={cancelPassword}
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          </form>
+        ) : (
+          <div className={styles.item}>
+            <div>
+              <span className={styles.label}>Passwort</span>
+              <span aria-hidden="true">••••••••</span>
+            </div>
+            <button
+              type="button"
+              className="btn btn--link"
+              onClick={() => setEditingPassword(true)}
+            >
+              Ändern
+            </button>
+          </div>
+        )}
+      </section>
+
+      <section className={styles.section}>
+        <h2>Konto</h2>
+
+        {deletingAccount ? (
+          <form
+            onSubmit={handleDeleteAccount}
+            className={`form ${styles.item}`}
           >
-            Abbrechen
-          </button>
-        </form>
-      ) : (
-        <button
-          className="btn btn--default"
-          onClick={() => setEditingPassword(true)}
-        >
-          Passwort ändern
-        </button>
-      )}
-
-      {error && <FormMessage type="error">{error}</FormMessage>}
-      {info && <FormMessage type="info">{info}</FormMessage>}
-
-      {deletingAccount ? (
-        <form onSubmit={handleDeleteAccount} className="form form--profile">
-          <p>
-            Das Konto wird unwiderruflich gelöscht. Zur Bestätigung Passwort
-            eingeben:
-          </p>
-          <label>
-            Passwort
-            <input
-              type="password"
-              value={deletePassword}
-              onChange={(e) => setDeletePassword(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Konto endgültig löschen</button>
-          <button
-            type="button"
-            className="btn btn--default"
-            onClick={cancelDeleteAccount}
-          >
-            Abbrechen
-          </button>
-        </form>
-      ) : (
-        <button
-          className="btn btn--default"
-          onClick={() => setDeletingAccount(true)}
-        >
-          Konto löschen
-        </button>
-      )}
+            <div className={styles.editForm}>
+              <p>
+                Das Konto wird unwiderruflich gelöscht. Zur Bestätigung Passwort
+                eingeben:
+              </p>
+              <label>
+                Passwort
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  required
+                />
+              </label>
+              <div className={styles.actions}>
+                <button type="submit" className="btn btn--danger">
+                  Konto endgültig löschen
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--link"
+                  onClick={cancelDeleteAccount}
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          </form>
+        ) : (
+          <div className={styles.item}>
+            <div>
+              <span className={styles.label}>Konto löschen</span>
+              <span>Alle Favoriten und Notizen gehen verloren.</span>
+            </div>
+            <button
+              type="button"
+              className={`btn btn--link ${styles.dangerLink}`}
+              onClick={() => setDeletingAccount(true)}
+            >
+              Löschen
+            </button>
+          </div>
+        )}
+      </section>
     </>
   );
 }

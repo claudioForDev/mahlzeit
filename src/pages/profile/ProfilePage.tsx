@@ -5,10 +5,11 @@ import {
 } from '../../store/authStore';
 import { AuthForm } from '../../components/auth/AuthForm';
 import styles from './ProfilePage.module.scss';
-import { CircleUser } from 'lucide-react';
+import { Avatar } from '../../components/ui/Avatar/Avatar';
 import { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Pencil, Bell, LifeBuoy, LogOut } from 'lucide-react';
+import { Pencil, LifeBuoy, LogOut } from 'lucide-react';
+import { useRecipeActions, useRecipeStore } from '../../store/recipeStore';
 
 export function ProfilePage() {
   const currentUser = useAuthStore((s) => s.currentUser);
@@ -18,6 +19,14 @@ export function ProfilePage() {
   const { logout } = useAuthActions();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const userRecipeCount = useRecipeStore((s) => s.userRecipeCount);
+  const { loadUserRecipeCount } = useRecipeActions();
+
+  // Before the early return below (rules of hooks); anonymous users can't create recipes
+  useEffect(() => {
+    if (!isAnonymous) loadUserRecipeCount();
+  }, [isAnonymous, loadUserRecipeCount]);
 
   // If the user came from another page via a login link,
   // send them back there after a successful login/registration
@@ -34,8 +43,10 @@ export function ProfilePage() {
         <h1>Profil</h1>
         <div className="profile profile--anonymous">
           <p>
-            Registriere dich, um ein Profil zu haben und deine Favoriten
-            dauerhaft zu sichern.
+            <strong>
+              Registriere dich, um ein Profil zu haben und deine Favoriten
+              dauerhaft zu sichern.
+            </strong>
           </p>
           <AuthForm />
         </div>
@@ -49,36 +60,30 @@ export function ProfilePage() {
 
   return (
     <>
+      <title>Profil | mahlzeit</title>
       <h1>Profil</h1>
       <div className={styles.profile}>
         <div className={styles.user}>
-          {photoURL ? (
-            <img
-              src={photoURL}
-              alt="Profilbild"
-              className={styles.profileImg}
-            />
-          ) : (
-            <span className={`${styles.profileImg} ${styles.empty}`}>
-              <CircleUser size={40} strokeWidth={1.5} />
-            </span>
-          )}
+          <Avatar photoURL={photoURL} />
 
           <div>
             <h2>{displayName}</h2>
-            <p>{currentUser?.email}</p>
-            {memberSince && <p>Mitglied seit {memberSince}</p>}
+            <p>
+              {currentUser?.email}
+              <br />
+              {memberSince && <>Mitglied seit {memberSince}</>}
+            </p>
           </div>
         </div>
 
         <ul className={styles.stats}>
           <li className={styles.statItem}>
+            <span className={styles.statCount}>{userRecipeCount ?? '–'}</span>
             Rezepte
-            <span className={styles.statCount}>Anzahl</span>
           </li>
           <li className={styles.statItem}>
-            Favoriten
             <span className={styles.statCount}>Anzahl</span>
+            Favoriten
           </li>
         </ul>
 
@@ -87,12 +92,6 @@ export function ProfilePage() {
             <Link to="/profil/bearbeiten" className={styles.menuItem}>
               <Pencil size={20} strokeWidth={1.75} />
               <span>Profil bearbeiten</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/benachrichtigungen" className={styles.menuItem}>
-              <Bell size={20} strokeWidth={1.75} />
-              <span>Benachrichtigungen</span>
             </Link>
           </li>
           <li>

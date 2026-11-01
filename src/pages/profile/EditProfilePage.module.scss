@@ -1,0 +1,63 @@
+@use '../../styles/abstracts' as *;
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: $space-s;
+}
+
+.section {
+  margin: $space-m 0;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  gap: $space-m;
+  padding: $space-s 0;
+  border-top: 1px solid $color-border;
+
+  .label {
+    display: block;
+    font-size: $font-xs;
+    font-weight: $font-bold;
+    text-transform: uppercase;
+    color: $color-text-light;
+  }
+}
+
+.editForm {
+  width: 100%;
+
+  label:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $space-m;
+  margin-top: $space-s;
+}
+
+.avatar {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-m;
+
+  .actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-xs;
+    margin-top: 0;
+  }
+}
+
+.dangerLink {
+  color: $color-error;
+
+  &:hover {
+    color: $color-error;
+    text-decoration: none;
+  }
+}

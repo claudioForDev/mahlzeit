@@ -3,26 +3,21 @@
 .profile {
   display: grid;
   gap: $space-l;
+  margin-top: $space-m;
 }
 
 .user {
   display: flex;
-  gap: 20px;
-}
+  align-items: center;
+  gap: $space-m;
 
-.profileImg {
-  display: block;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+  h2 {
+    margin-bottom: $space-xs;
+  }
 
-  &.empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $color-border;
-    color: $color-text;
+  p {
+    font-size: $font-xs;
+    color: $color-text-light;
   }
 }
 
@@ -36,13 +31,21 @@
     background-color: white;
     display: grid;
     justify-content: center;
+    gap: $space-xs;
     border-radius: $border-radius-default;
-    padding: $space-s;
+    padding: $space-m;
+    box-shadow: $box-shadow-default;
+    font-size: $font-xs;
+    font-weight: $font-bold;
+    text-transform: uppercase;
+    color: $color-text-light;
   }
 
   .statCount {
     display: block;
-    font-size: 2rem;
+    font-size: $font-xl;
+    line-height: 1;
+    color: black;
   }
 }
 
@@ -52,10 +55,27 @@
 
   .menuItem {
     display: flex;
-    gap: $space-s;
+    align-items: center;
+    gap: $space-m;
     background-color: white;
-    padding: $space-s;
+    font-weight: $font-bold;
+    padding: $space-m;
     width: 100%;
     border-radius: $border-radius-default;
+    box-shadow: $box-shadow-default;
+    color: $color-text;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: $transition-default;
+
+    svg {
+      flex-shrink: 0;
+      color: $color-primary;
+    }
+
+    &:hover {
+      color: $color-primary;
+    }
   }
 }

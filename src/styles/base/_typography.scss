@@ -30,6 +30,7 @@ h1 {
 
 h2 {
   font-size: $font-m;
+  margin-bottom: $space-s;
 }
 
 h1,
@@ -37,6 +38,14 @@ h2,
 h3,
 h4 {
   color: black;
+}
+
+p {
+  margin-bottom: $space-m;
+}
+
+strong {
+  font-weight: $font-bold;
 }
 
 a {
