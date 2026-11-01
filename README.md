@@ -39,9 +39,33 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=657210771975
 VITE_FIREBASE_APP_ID=1:657210771975:web:610731ffc128b774b078a2
 ```
 
-Lokal mit Emulatoren: `firebase emulators:start`
+Voraussetzungen: Node 24 (siehe `.nvmrc`), Java (für den Firestore-Emulator) und die Firebase CLI (`npm install -g firebase-tools`).
 
-Voraussetzungen: Node 24 (siehe `.nvmrc`) und Java (für den Firestore-Emulator).
+### Lokale Entwicklung mit Emulatoren
+
+Im Dev-Modus (`npm run dev`) verbindet sich die App automatisch mit den lokalen Firebase-Emulatoren statt mit dem echten Projekt (siehe `src/firebase.ts`). Die Emulatoren müssen deshalb **vor** dem Dev-Server laufen, sonst bleibt die App bei «Laden …» stehen.
+
+In zwei Terminals starten:
+
+```bash
+# Terminal 1: Auth-, Firestore- und Storage-Emulator
+npm run emulators
+
+# Terminal 2: Vite Dev-Server
+npm run dev
+```
+
+| Dienst      | Adresse               |
+| ----------- | --------------------- |
+| App         | http://localhost:5173 |
+| Emulator UI | http://localhost:4000 |
+| Auth        | localhost:9099        |
+| Firestore   | localhost:8080        |
+| Storage     | localhost:9199        |
+
+In der **Emulator UI** sieht man die angelegten User, die Firestore-Dokumente und die hochgeladenen Bilder und kann sie bearbeiten oder löschen.
+
+Die Testdaten bleiben erhalten: Beim Beenden mit `Ctrl` + `C` werden sie in den Ordner `emulator-data/` exportiert und beim nächsten Start wieder importiert. Der Ordner ist in `.gitignore`, die Daten sind also nur lokal vorhanden. Nach einem frischen Clone startet man mit leeren Emulatoren.
 
 ## Tests
 
