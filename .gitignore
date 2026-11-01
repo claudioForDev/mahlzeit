@@ -29,6 +29,8 @@ firebase-debug.log
 
 # Lokale Testdaten der Emulatoren (npm run emulators)
 /emulator-data/
+# Temporary folder while exporting, left behind when the export is interrupted
+/firebase-export-*/
 
 # Local project documents
 /docs/
