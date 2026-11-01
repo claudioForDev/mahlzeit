@@ -8,6 +8,7 @@ import { FavoritesPage } from './pages/FavoritesPage/FavoritesPage';
 import { EditProfilePage } from './pages/profile/EditProfilePage';
 import { CreateRecipePage } from './pages/CreateRecipePage/CreateRecipePage';
 import { RecipeDetailPage } from './pages/RecipeDetailPage/RecipeDetailPage';
+import { HelpPage } from './pages/profile/HelpPage';
 import { useAuthStore } from './store/authStore';
 
 function App() {
@@ -36,6 +37,7 @@ function AppRoutes() {
       <Route path="/profil" element={<ProfilePage />} />
       <Route path="/profil/bearbeiten" element={<EditProfilePage />} />
       <Route path="/rezepte/:id" element={<RecipeDetailPage />} />
+      <Route path="/profil/hilfe" element={<HelpPage />} />
     </Routes>
   );
 }

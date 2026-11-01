@@ -1,0 +1,62 @@
+@use '../../../styles/abstracts' as *;
+
+.accordion {
+  border-top: 1px solid $color-border;
+  padding-top: $space-xs;
+
+  .title {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 30px;
+    text-align: left;
+    padding: 0;
+    margin-bottom: $space-s;
+    gap: $space-m;
+
+    span {
+      &.text {
+        font-size: $font-m;
+        font-weight: $font-bold;
+      }
+
+      &.icon {
+        background-color: $color-primary;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: $transition-default;
+      }
+    }
+  }
+
+  .panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows $transition-default;
+  }
+
+  .inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &.open {
+    .icon {
+      transform: scale(-1);
+    }
+
+    .panel {
+      grid-template-rows: 1fr;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion .panel {
+    transition: none;
+  }
+}

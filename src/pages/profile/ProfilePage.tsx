@@ -95,7 +95,7 @@ export function ProfilePage() {
             </Link>
           </li>
           <li>
-            <Link to="/hilfe" className={styles.menuItem}>
+            <Link to="/profil/hilfe" className={styles.menuItem}>
               <LifeBuoy size={20} strokeWidth={1.75} />
               <span>Hilfe & Support</span>
             </Link>
