@@ -6,6 +6,7 @@ import { getErrorMessage } from '../domain/errors';
 interface RecipeState {
   recipes: Recipe[];
   currentRecipe: Recipe | null; // detail view; null = not loaded or not found
+  userRecipeCount: number | null; // profile; null = not loaded yet
   loading: boolean;
   error: string | null;
   actions: RecipeActions;
@@ -18,6 +19,7 @@ interface RecipeActions {
     input: RecipeInput,
     image?: File,
   ) => Promise<string | undefined>; // new ID, undefined on error
+  loadUserRecipeCount: () => Promise<void>;
 }
 
 export const useRecipeStore = create<RecipeState>()((set) => {
@@ -36,6 +38,7 @@ export const useRecipeStore = create<RecipeState>()((set) => {
   return {
     recipes: [],
     currentRecipe: null,
+    userRecipeCount: null,
     loading: false,
     error: null,
     actions: {
@@ -52,6 +55,11 @@ export const useRecipeStore = create<RecipeState>()((set) => {
 
       createRecipe: (input, image) =>
         run(() => recipeService.createRecipe(input, image)),
+
+      loadUserRecipeCount: () =>
+        run(async () => {
+          set({ userRecipeCount: await recipeService.countUserRecipes() });
+        }),
     },
   };
 });

@@ -7,6 +7,8 @@ import {
   query,
   orderBy,
   limit,
+  where,
+  getCountFromServer,
   serverTimestamp,
   type DocumentSnapshot,
 } from 'firebase/firestore';
@@ -85,4 +87,12 @@ export async function listRecipes() {
 export async function getRecipe(id: string) {
   const snap = await getDoc(doc(recipesCol, id));
   return snap.exists() ? toRecipe(snap) : null;
+}
+
+// Number of recipes created by the signed-in user (counted on the server, no download)
+export async function countUserRecipes() {
+  const user = requireUser();
+  const q = query(recipesCol, where('authorId', '==', user.uid));
+  const snap = await getCountFromServer(q);
+  return snap.data().count;
 }
