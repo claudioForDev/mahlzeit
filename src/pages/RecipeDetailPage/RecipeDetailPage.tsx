@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useRecipeStore, useRecipeActions } from '../../store/recipeStore';
 import {
@@ -13,6 +13,7 @@ import { RecipeNotes } from '../../components/recipe/RecipeNotes/RecipeNotes';
 import styles from './RecipeDetailPage.module.scss';
 import { ShareButton } from '../../components/recipe/ShareButton/ShareButton';
 import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
+import { BackLink } from '../../components/ui/BackLink/BackLink';
 
 export function RecipeDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -35,9 +36,7 @@ export function RecipeDetailPage() {
     return loaded ? (
       <>
         <h1 className={styles.title}>Rezept nicht gefunden</h1>
-        <Link to="/rezepte" className="btn btn--back">
-          Zurück zu den Rezepten
-        </Link>
+        <BackLink fallback="/rezepte">Zu den Rezepten</BackLink>
       </>
     ) : (
       <p>Rezept wird geladen …</p>
@@ -69,9 +68,9 @@ export function RecipeDetailPage() {
           />
         ) : null}
 
-        <Link to="/rezepte" className={`btn btn--back ${styles.backBtn}`}>
-          zurück
-        </Link>
+        <BackLink fallback="/rezepte" className={styles.backBtn}>
+          Zurück
+        </BackLink>
 
         {/* TODO: favorites, once the module is built */}
         <button type="button" className={`btn btn--favorite ${styles.favBtn}`}>

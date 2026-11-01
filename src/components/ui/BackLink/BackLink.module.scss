@@ -1,0 +1,10 @@
+@use '../../../styles/abstracts' as *;
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: $space-m;
+  background-color: white;
+  padding: $space-xs $space-s;
+  border-radius: $border-radius-default;
+  box-shadow: $box-shadow-default;
+}

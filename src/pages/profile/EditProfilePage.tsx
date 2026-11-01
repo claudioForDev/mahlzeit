@@ -8,8 +8,7 @@ import { AuthForm } from '../../components/auth/AuthForm';
 import { FormMessage } from '../../components/ui/FormMessage/FormMessage';
 import { Avatar } from '../../components/ui/Avatar/Avatar';
 import styles from './EditProfilePage.module.scss';
-import { ChevronLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { BackLink } from '../../components/ui/BackLink/BackLink';
 
 export function EditProfilePage() {
   const currentUser = useAuthStore((s) => s.currentUser);
@@ -105,10 +104,8 @@ export function EditProfilePage() {
     <>
       <title>Profil bearbeiten | mahlzeit</title>
 
-      <Link to="/profil" className={`btn btn--link ${styles.backLink}`}>
-        <ChevronLeft size={16} aria-hidden="true" />
-        Zurück zum Profil
-      </Link>
+      <BackLink fallback="/profil">Zurück</BackLink>
+
       <h1>Profil bearbeiten</h1>
 
       {/* At the top so the message is visible no matter which section was changed */}
